@@ -28,11 +28,10 @@ function init(){
 		renderer = new THREE.WebGLRenderer({
 			antialias		: true,	// to get smoother output
 			preserveDrawingBuffer	: true,	// to allow screenshot
-					alpha: true,
-					clearColor: 0xff0000,
-					clearAlpha: 1
+			alpha: true,
+			clearColor: 0xff0000,
+			clearAlpha: 1
 		});
-		//renderer.setClearColorHex( 0xBBBBBB, 1 );
 	// uncomment if webgl is required
 	//}else{
 	//	Detector.addGetWebGLMessage();
@@ -94,8 +93,20 @@ function init(){
 	var loader = new THREE.ColladaLoader();
 	loader.load('models/airbus-a350-800.dae', function (result) {
 		plane = result.scene;
+		//plane.position.set(0,0,0);
 		scene.add(plane);
 	});
+	
+	/*
+	loader = new THREE.JSONLoader();
+    loader.load( "models/centered.json", function( geometry ) {
+        mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial() );
+        mesh.scale.set( 10, 10, 10 );
+        mesh.position.y = 0;
+        mesh.position.x = 0;
+        scene.add( mesh );
+    } );
+    */
 }
 
 // animation loop
@@ -108,6 +119,7 @@ function animate() {
 	
 	//plane.rotation.x += 0.01;
 	//plane.rotation.z += 0.01;
+	//camera.rotation.y += 0.01;
 	
 	// do the render
 	render();
