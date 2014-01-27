@@ -1,0 +1,129 @@
+body {
+	background: #ffffff;
+	color: #444444;
+	font-family: sans-serif;
+	line-height: 1.231;
+}
+
+body.dark_layout {
+	background: #1a1a1a;
+}
+
+a {
+	text-decoration: none;
+}
+
+/* HEADER LOGO */
+/* this is largely ported from the main businessweek.com css */
+
+#logo {
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	display: block;
+	position: relative;
+	float: left;
+	width: 477px;
+	height: 60px;
+	margin: 10px 0;
+}
+
+.iframed #logo {
+	display:none;
+}
+
+#logo a {
+	width: 100%;
+	height: inherit;
+	display: block;
+}
+
+#logo a#home_link {
+	width: 427px;
+	height: 33px;
+	background: url(http://static.btrd.net/assets/site-s5d303eb3f3-448dcf1d9671789f047efdb043527a71.png) no-repeat;
+	background-position: 0 -145px;
+}
+
+.dark_layout #logo a#home_link {
+	background-position: 0 -184px;
+}
+
+/* SUBHEAD */
+
+h2 {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+}
+
+h2 a {
+	color: #f0f;
+}
+
+#channel_name {
+	position: absolute;
+	bottom: 0;
+	font-size: 27px;
+	display: block;
+	text-indent: 0;
+	font-weight: bold;
+	text-transform: capitalize;
+	font-family: "BWHaasHead",Arial,sans-serif;
+}
+
+#channel_name a, .channel #department_name a {
+	text-indent: 0;
+	width: auto;
+	height: auto;
+}
+
+#logo a {
+	display: block;
+}
+
+/* HELPER STUFF */
+
+.ir {
+	text-indent: -119988px;
+	overflow: hidden;
+	text-align: left;
+	direction: ltr;
+	background-repeat: no-repeat;
+}
+
+/* THREE.JS */
+
+body {
+	overflow	: hidden;
+	padding		: 0;
+	margin		: 0;
+
+	color		: #222;
+	background-color: #87CEEB;
+	font-family	: arial;
+	font-size	: 100%;
+}
+#info .top {
+	position	: absolute;
+	top		: 0px;
+	width		: 100%;
+	padding		: 5px;
+	text-align	: center;
+}
+#info a {
+	color		: #66F;
+	text-decoration	: none;
+}
+#info a:hover {
+	text-decoration	: underline;
+}
+#info .bottom {
+	position	: absolute;
+	bottom		: 0px;
+	right		: 5px;
+	padding		: 5px;
+}
