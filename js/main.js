@@ -76,12 +76,13 @@ function init(){
 	}
 
 	// for reference, cube at center
-	/*
+	
 	geometry = new THREE.CubeGeometry( 10, 10, 10 );
-	material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
-	mesh = new THREE.Mesh( geometry, material );
+	//material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
+	//mesh = new THREE.Mesh( geometry, material );
+	mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
 	scene.add( mesh );	
-	*/
+	
 	
 	// Create lights
 	var light = new THREE.PointLight(0xEEEEEE);
@@ -106,16 +107,12 @@ function init(){
 		scene.add(plane);
 	});
 	
-	/*
-	loader = new THREE.JSONLoader();
-    loader.load( "models/centered.json", function( geometry ) {
-        mesh = new THREE.Mesh( geometry, new THREE.MeshNormalMaterial() );
-        mesh.scale.set( 10, 10, 10 );
-        mesh.position.y = 0;
-        mesh.position.x = 0;
-        scene.add( mesh );
-    } );
-    */
+	// from three.js/examples/webgl_interactive_cubes.html
+	projector = new THREE.Projector();
+	raycaster = new THREE.Raycaster();
+	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	window.addEventListener( 'resize', onWindowResize, false );
+
 }
 
 // animation loop
@@ -125,10 +122,6 @@ function animate() {
 	// - it has to be at the begining of the function
 	// - see details at http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 	requestAnimationFrame( animate );
-	
-	//plane.rotation.x += 0.01;
-	//plane.rotation.z += 0.01;
-	//camera.rotation.y += 0.01;
 	
 	// do the render
 	render();
@@ -143,13 +136,71 @@ function render() {
 	// update camera controls
 	//cameraControls.update();
 	
+	// rotate the camera around the centerpoint, on the ground plane
 	theta += 0.3;
-
 	camera.position.x = radius * Math.cos( THREE.Math.degToRad( theta ) );
 	camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
 	camera.lookAt( scene.position );
-	console.log(scene.position);
+
+
+
+	// find intersections
+
+	var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );
+	projector.unprojectVector( vector, camera );
+
+	raycaster.set( camera.position, vector.sub( camera.position ).normalize() );
+
+	var intersects = raycaster.intersectObjects( scene.children );
+
+	if ( intersects.length > 0 ) {
+
+		if ( INTERSECTED != intersects[ 0 ].object ) {
+
+			if ( INTERSECTED ) { 
+				INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+				console.log("INTERSECTED!");
+			}
+
+			INTERSECTED = intersects[ 0 ].object;
+			INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+			INTERSECTED.material.emissive.setHex( 0xff0000 );
+
+		}
+
+	} else {
+
+		if ( INTERSECTED ) {
+			INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+			console.log("INTERSECTED 2!");
+		}
+
+		INTERSECTED = null;
+
+	}
+	
+
+
 
 	// actually render the scene
 	renderer.render( scene, camera );
 }
+
+function onWindowResize() {
+
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
+
+function onDocumentMouseMove( event ) {
+
+	event.preventDefault();
+
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+}
+
