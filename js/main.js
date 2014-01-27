@@ -19,6 +19,11 @@ var stats, scene, renderer;
 var camera, cameraControls;
 var plane;
 
+var camera, scene, projector, raycaster, renderer;
+
+var mouse = new THREE.Vector2(), INTERSECTED;
+var radius = 75, theta = 0;
+
 if( !init() )	animate();
 
 // init the scene
@@ -53,9 +58,9 @@ function init(){
 
 	// put a camera in the scene
 	camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
-	camera.position.set(-30,-30,0);
+	camera.position.set(-50,-50,0);
 	camera.up = new THREE.Vector3(0,0,1);
-	camera.lookAt(new THREE.Vector3(0,0,0));
+	camera.lookAt(scene.position);
 	scene.add(camera);
 
 	// create a camera contol
@@ -70,30 +75,34 @@ function init(){
 		THREEx.FullScreen.bindKey();		
 	}
 
-	// here you add your objects
-	// - you will most likely replace this part by your own
+	// for reference, cube at center
 	/*
-	var geometry	= new THREE.TorusGeometry( 1, 0.42 );
-	var material	= new THREE.MeshNormalMaterial();
-	var mesh	= new THREE.Mesh( geometry, material );
-	scene.add( mesh );
+	geometry = new THREE.CubeGeometry( 10, 10, 10 );
+	material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+	mesh = new THREE.Mesh( geometry, material );
+	scene.add( mesh );	
 	*/
 	
 	// Create lights
 	var light = new THREE.PointLight(0xEEEEEE);
-	light.position.set(20, 0, 20);
+	light.position.set(-20, 0, 20);
 	light.intensity = 1;
 	scene.add(light);
 	
 	var light2 = new THREE.PointLight(0xEEEEEE);
-	light2.position.set(-20, 0, -20);
-	light2.intensity = 0.5;
+	light2.position.set(20, 0, 20);
+	light2.intensity = .8;
 	scene.add(light2);
+	
+	var light3 = new THREE.PointLight(0xEEEEEE);
+	light3.position.set(10, 0, -20);
+	light3.intensity = .5;
+	scene.add(light3);
 	
 	var loader = new THREE.ColladaLoader();
 	loader.load('models/airbus-a350-800.dae', function (result) {
 		plane = result.scene;
-		//plane.position.set(0,0,0);
+		plane.position.set(-32,-20,-5);
 		scene.add(plane);
 	});
 	
@@ -133,6 +142,13 @@ function render() {
 
 	// update camera controls
 	//cameraControls.update();
+	
+	theta += 0.3;
+
+	camera.position.x = radius * Math.cos( THREE.Math.degToRad( theta ) );
+	camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
+	camera.lookAt( scene.position );
+	console.log(scene.position);
 
 	// actually render the scene
 	renderer.render( scene, camera );
