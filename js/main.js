@@ -16,7 +16,7 @@ $( document ).ready(function() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 var stats, scene, renderer;
-var camera, cameraControls;
+var camera, controls;
 var plane;
 
 var camera, scene, projector, raycaster, renderer;
@@ -89,7 +89,9 @@ function init(){
 	scene.add(camera);
 
 	// create a camera contol
-	//cameraControls	= new THREEx.DragPanControls(camera)
+	// cf. view-source:http://threejs.org/examples/misc_controls_orbit.html
+	controls = new THREE.OrbitControls( camera );
+	controls.addEventListener( 'change', render );
 
 	// transparently support window resize
 	THREEx.WindowResize.bind(renderer, camera);
@@ -204,6 +206,9 @@ function animate() {
 	// - it has to be at the begining of the function
 	// - see details at http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 	requestAnimationFrame( animate );
+	
+	// ?
+	controls.update();
 	
 	// do the render
 	render();
