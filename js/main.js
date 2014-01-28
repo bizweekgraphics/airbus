@@ -24,6 +24,31 @@ var camera, scene, projector, raycaster, renderer;
 var mouse = new THREE.Vector2(), INTERSECTED;
 var radius = 75, theta = 0;
 
+var annotationLines = new Object();
+var highlighted = "";
+var annotations = {
+	"cockpit": {
+		"annotation": "The cockpit's the room where pilots and navigator sit, but that's not important right now.",
+		"coords": [0, -25, 5]
+		},
+	"fuselage": {
+		"annotation": "The fuselage seats four people, or six children. It looks like a big Tylenol.",
+		"coords": [0, 0, 5]
+		},
+	"tail": {
+		"annotation": "The tail is larger than the tails of most monkeys.",
+		"coords": [0, 20, 10]
+		},
+	"left turbine": {
+		"annotation": "The left turbine, manufactured by GE, produces like a million pounds of thrust.",
+		"coords": [10, -10, 0]
+		},    	
+	"right turbine": {
+		"annotation": "The right turbine, manufactured by GE, produces like a million pounds of thrust.",
+		"coords": [10, 10, 0]
+		}
+	};
+
 if( !init() )	animate();
 
 // init the scene
@@ -88,7 +113,7 @@ function init(){
 	geometry = new THREE.CubeGeometry( 10, 40, 10 );
 	material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true, visible:false } );
 	mesh = new THREE.Mesh( geometry, material );
-	mesh.position.set(0,10,0);
+	mesh.position.set(0,0,0);
 	mesh.name = "fuselage";
 	scene.add( mesh );	
 
@@ -96,7 +121,7 @@ function init(){
 	geometry = new THREE.CubeGeometry( 10, 10, 10 );
 	material = new THREE.MeshBasicMaterial( { color: 0xff00ff, wireframe: true, visible:false } );
 	mesh = new THREE.Mesh( geometry, material );
-	mesh.position.set(0,-15,0);
+	mesh.position.set(0,-25,0);
 	mesh.name = "cockpit";
 	scene.add( mesh );
 
@@ -104,21 +129,22 @@ function init(){
 	geometry = new THREE.CubeGeometry( 10, 10, 20 );
 	material = new THREE.MeshBasicMaterial( { color: 0xaaffaa, wireframe: true, visible:false } );
 	mesh = new THREE.Mesh( geometry, material );
-	mesh.position.set(0,35,5);
+	mesh.position.set(0,25,5);
 	mesh.name = "tail";
 	scene.add( mesh );
 	
 	
 	//annotations line
-	var material = new THREE.LineBasicMaterial({
-        color: 0x000000
-    });
-	var geometry = new THREE.Geometry();
-    geometry.vertices.push(new THREE.Vector3(-10, 0, 50));
-    geometry.vertices.push(new THREE.Vector3(10, 0, 0));
-    var line = new THREE.Line(geometry, material);
-    scene.add(line);	
-	
+    //scene.add(annotationLine);
+    
+    annotationLines.fuselage = buildLine("fuselage");
+    annotationLines.cockpit = buildLine("cockpit");
+    annotationLines.tail = buildLine("tail");
+    
+    scene.add(annotationLines.fuselage);
+    scene.add(annotationLines.cockpit);
+    scene.add(annotationLines.tail);
+		
 	// Create lights
 	var light = new THREE.PointLight(0xEEEEEE);
 	light.position.set(-20, 0, 20);
@@ -140,7 +166,7 @@ function init(){
 	loader.load('models/airbus-a350-800.dae', function (result) {
 		console.log(result);
 		plane = result.scene;
-		plane.position.set(-32,-20,-5);
+		plane.position.set(-32,-30,-5);
 		scene.add(plane);
 	});
 	
@@ -151,6 +177,24 @@ function init(){
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	window.addEventListener( 'resize', onWindowResize, false );
 
+}
+
+function buildLine(key) {
+	var material = new THREE.LineBasicMaterial({ color: 0x000000 });
+	var geometry = new THREE.Geometry();
+    geometry.vertices.push(new THREE.Vector3(0, 0, 25));
+    geometry.vertices.push(new THREE.Vector3(annotations[key].coords[0], annotations[key].coords[1], annotations[key].coords[2]));
+    var newLine = new THREE.Line(geometry, material);
+    newLine.visible = false;
+    return newLine;
+}
+
+function setAnnotation(key) {
+			annotationLines["fuselage"].visible = false;
+			annotationLines["tail"].visible = false;
+			annotationLines["cockpit"].visible = false;
+			annotationLines[key].visible = true;
+			$("#annie").html(annotations[key].annotation);
 }
 
 // animation loop
@@ -200,8 +244,9 @@ function render() {
 				console.log("INTERSECTED!");
 			}
 			
-			$("#annie").html("That's the "+intersects[ 0 ].object.name+"!");
-
+			var key = intersects[ 0 ].object.name;
+			setAnnotation(key);
+			
 			INTERSECTED = intersects[ 0 ].object;
 			//INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
 			//INTERSECTED.material.emissive.setHex( 0xff0000 );
