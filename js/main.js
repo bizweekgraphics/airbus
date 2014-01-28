@@ -76,13 +76,37 @@ function init(){
 	}
 
 	// for reference, cube at center
-	
+	/*
 	geometry = new THREE.CubeGeometry( 10, 10, 10 );
 	//material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
 	//mesh = new THREE.Mesh( geometry, material );
 	mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
 	scene.add( mesh );	
+	*/
 	
+	// fuselage
+	geometry = new THREE.CubeGeometry( 10, 40, 10 );
+	material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true, visible:false } );
+	mesh = new THREE.Mesh( geometry, material );
+	mesh.position.set(0,10,0);
+	mesh.name = "fuselage";
+	scene.add( mesh );	
+
+	// cockpit
+	geometry = new THREE.CubeGeometry( 10, 10, 10 );
+	material = new THREE.MeshBasicMaterial( { color: 0xff00ff, wireframe: true, visible:false } );
+	mesh = new THREE.Mesh( geometry, material );
+	mesh.position.set(0,-15,0);
+	mesh.name = "cockpit";
+	scene.add( mesh );
+
+	// tail	
+	geometry = new THREE.CubeGeometry( 10, 10, 20 );
+	material = new THREE.MeshBasicMaterial( { color: 0xaaffaa, wireframe: true, visible:false } );
+	mesh = new THREE.Mesh( geometry, material );
+	mesh.position.set(0,35,5);
+	mesh.name = "tail";
+	scene.add( mesh );
 	
 	// Create lights
 	var light = new THREE.PointLight(0xEEEEEE);
@@ -100,12 +124,15 @@ function init(){
 	light3.intensity = .5;
 	scene.add(light3);
 	
+	
 	var loader = new THREE.ColladaLoader();
 	loader.load('models/airbus-a350-800.dae', function (result) {
+		console.log(result);
 		plane = result.scene;
 		plane.position.set(-32,-20,-5);
 		scene.add(plane);
 	});
+	
 	
 	// from three.js/examples/webgl_interactive_cubes.html
 	projector = new THREE.Projector();
@@ -158,20 +185,22 @@ function render() {
 		if ( INTERSECTED != intersects[ 0 ].object ) {
 
 			if ( INTERSECTED ) { 
-				INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+				//INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
 				console.log("INTERSECTED!");
 			}
+			
+			$("#annie").html("That's the "+intersects[ 0 ].object.name+"!");
 
 			INTERSECTED = intersects[ 0 ].object;
-			INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-			INTERSECTED.material.emissive.setHex( 0xff0000 );
+			//INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+			//INTERSECTED.material.emissive.setHex( 0xff0000 );
 
 		}
 
 	} else {
 
 		if ( INTERSECTED ) {
-			INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+			//INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
 			console.log("INTERSECTED 2!");
 		}
 

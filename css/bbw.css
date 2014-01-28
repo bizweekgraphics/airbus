@@ -42,7 +42,7 @@ a {
 #logo a#home_link {
 	width: 427px;
 	height: 33px;
-	background: url(http://static.btrd.net/assets/site-s5d303eb3f3-448dcf1d9671789f047efdb043527a71.png) no-repeat;
+	background: url(../img/logosprite-transparent.png) no-repeat;
 	background-position: 0 -145px;
 }
 
