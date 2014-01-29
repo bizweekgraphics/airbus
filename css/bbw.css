@@ -127,3 +127,35 @@ body {
 	right		: 5px;
 	padding		: 5px;
 }
+
+/* ANNOTATIONS */
+
+#views {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	width: 300px;
+	height: 60px;
+	box-sizing: border-box;
+}
+
+#views div {
+	width:60px;
+	height:60px;
+	float:left;
+	background-size: contain;
+	background-repeat:no-repeat;
+	background-position:center;
+	box-sizing: border-box;
+	cursor: pointer;
+}
+
+#annotations {
+	position: absolute;
+	top:90px; 
+	right: 20px;
+	padding: 10px;
+	border: 1px solid black; 
+	width: 300px;
+	box-sizing: border-box;
+}

@@ -246,9 +246,7 @@ function onDocumentMouseDown( event ) {
 	mouseDown = true;
 }
 
-
-
-
+// for skybox
 function loadTexture( path ) {
 
 	var texture = new THREE.Texture( texture_placeholder );
@@ -266,3 +264,28 @@ function loadTexture( path ) {
 	return material;
 
 }
+
+$("#top").on("click", function(e) {
+	camera.position.set(0,15,0);
+	camera.lookAt( scene.position );
+});
+
+$("#nose").on("click", function(e) {
+	camera.position.set(0,0,5);
+	camera.lookAt( scene.position );
+});
+
+$("#tail").on("click", function(e) {
+	camera.position.set(0,0,-5);
+	camera.lookAt( scene.position );
+});
+
+$("#side").on("click", function(e) {
+	camera.position.set(-10,0,0);
+	camera.lookAt( scene.position );
+});
+
+$("#engine").on("click", function(e) {
+	camera.position.set(2.5,-.5,2.5);
+	camera.lookAt( scene.position );
+});
