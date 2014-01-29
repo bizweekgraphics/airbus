@@ -21,31 +21,32 @@ var plane;
 
 var camera, scene, projector, raycaster, renderer;
 
+var mouseDown = false;
 var mouse = new THREE.Vector2(), INTERSECTED;
-var radius = 75, theta = 0;
+var radius = 7, theta = 0;
 
 var annotationLines = new Object();
 var highlighted = "";
 var annotations = {
 	"cockpit": {
 		"annotation": "The cockpit's the room where pilots and navigator sit, but that's not important right now.",
-		"coords": [0, -25, 5]
+		"coords": [0, .5, 2.5]
 		},
 	"fuselage": {
 		"annotation": "The fuselage seats four people, or six children. It looks like a big Tylenol.",
-		"coords": [0, 0, 5]
+		"coords": [0, .5, 0]
 		},
 	"tail": {
 		"annotation": "The tail is larger than the tails of most monkeys.",
-		"coords": [0, 20, 10]
+		"coords": [0, 1, -2]
 		},
 	"left turbine": {
 		"annotation": "The left turbine, manufactured by GE, produces like a million pounds of thrust.",
-		"coords": [10, -10, 0]
+		"coords": [1,, 0 -1]
 		},    	
 	"right turbine": {
 		"annotation": "The right turbine, manufactured by GE, produces like a million pounds of thrust.",
-		"coords": [10, 10, 0]
+		"coords": [1, 0, 1]
 		}
 	};
 
@@ -83,9 +84,9 @@ function init(){
 
 	// put a camera in the scene
 	camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
-	camera.position.set(0,0,5);
+	camera.position.set(-4,2,8);
 	//camera.up = new THREE.Vector3(0,0,1);
-	//camera.lookAt(scene.position);
+	camera.lookAt(scene.position);
 	scene.add(camera);
 
 	// create a camera contol
@@ -104,41 +105,41 @@ function init(){
 
 	// for reference, cube at center
 	/*
-	geometry = new THREE.CubeGeometry( 2, 2, 2 );
-	//material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
-	//mesh = new THREE.Mesh( geometry, material );
-	mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
-	scene.add( mesh );	
+	geometry = new THREE.CubeGeometry( 1, 1, 1 );
+	material = new THREE.MeshBasicMaterial( { color: 0x0000ff, wireframe: true } );
+	mesh = new THREE.Mesh( geometry, material );
+	//mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
+	scene.add( mesh );
 	*/
-	/*
+	
 	// fuselage
-	geometry = new THREE.CubeGeometry( 10, 40, 10 );
-	material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true, visible:false } );
+	geometry = new THREE.CubeGeometry( 1, 1, 4 );
+	material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true, visible:true } );
 	mesh = new THREE.Mesh( geometry, material );
 	mesh.position.set(0,0,0);
 	mesh.name = "fuselage";
 	scene.add( mesh );	
 
 	// cockpit
-	geometry = new THREE.CubeGeometry( 10, 10, 10 );
-	material = new THREE.MeshBasicMaterial( { color: 0xff00ff, wireframe: true, visible:false } );
+	geometry = new THREE.CubeGeometry( 1, 1, 1 );
+	material = new THREE.MeshBasicMaterial( { color: 0xff00ff, wireframe: true, visible:true } );
 	mesh = new THREE.Mesh( geometry, material );
-	mesh.position.set(0,-25,0);
+	mesh.position.set(0,0,2.5);
 	mesh.name = "cockpit";
 	scene.add( mesh );
 
 	// tail	
-	geometry = new THREE.CubeGeometry( 10, 10, 20 );
-	material = new THREE.MeshBasicMaterial( { color: 0xaaffaa, wireframe: true, visible:false } );
+	geometry = new THREE.CubeGeometry( 1, 2, 1 );
+	material = new THREE.MeshBasicMaterial( { color: 0xaaffaa, wireframe: true, visible:true } );
 	mesh = new THREE.Mesh( geometry, material );
-	mesh.position.set(0,25,5);
+	mesh.position.set(0,.5,-2.5);
 	mesh.name = "tail";
 	scene.add( mesh );
-	*/
+	
 	
 	//annotations line
     //scene.add(annotationLine);
-    /*
+    
     annotationLines.fuselage = buildLine("fuselage");
     annotationLines.cockpit = buildLine("cockpit");
     annotationLines.tail = buildLine("tail");
@@ -146,7 +147,7 @@ function init(){
     scene.add(annotationLines.fuselage);
     scene.add(annotationLines.cockpit);
     scene.add(annotationLines.tail);
-		*/
+		
 	// Create lights
 	
 	var light = new THREE.PointLight(0xEEEEEE);
@@ -185,6 +186,7 @@ function init(){
 	projector = new THREE.Projector();
 	raycaster = new THREE.Raycaster();
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	window.addEventListener( 'resize', onWindowResize, false );
 
 }
@@ -192,7 +194,7 @@ function init(){
 function buildLine(key) {
 	var material = new THREE.LineBasicMaterial({ color: 0x000000 });
 	var geometry = new THREE.Geometry();
-    geometry.vertices.push(new THREE.Vector3(0, 0, 25));
+    geometry.vertices.push(new THREE.Vector3(0, 25, 0));
     geometry.vertices.push(new THREE.Vector3(annotations[key].coords[0], annotations[key].coords[1], annotations[key].coords[2]));
     var newLine = new THREE.Line(geometry, material);
     newLine.visible = false;
@@ -232,11 +234,12 @@ function render() {
 	//cameraControls.update();
 	
 	// rotate the camera around the centerpoint, on the ground plane
-	//theta += 0.3;
-	//camera.position.x = radius * Math.cos( THREE.Math.degToRad( theta ) );
-	//camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
-	//camera.lookAt( scene.position );
-
+	if(!mouseDown) {
+		theta += 0.3;
+		camera.position.x = radius * Math.cos( THREE.Math.degToRad( theta ) );
+		camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
+		camera.lookAt( scene.position );
+	}
 
 
 	// find intersections
@@ -302,42 +305,6 @@ function onDocumentMouseMove( event ) {
 
 }
 
-
-// Rotation functions by Cory Gross
-// http://stackoverflow.com/a/11060965/120290
-
-// Rotate an object around an arbitrary axis in object space
-var rotObjectMatrix;
-function rotateAroundObjectAxis(object, axis, radians) {
-    rotObjectMatrix = new THREE.Matrix4();
-    rotObjectMatrix.makeRotationAxis(axis.normalize(), radians);
-
-    // old code for Three.JS pre r54:
-    // object.matrix.multiplySelf(rotObjectMatrix);      // post-multiply
-    // new code for Three.JS r55+:
-    object.matrix.multiply(rotObjectMatrix);
-
-    // old code for Three.js pre r49:
-    // object.rotation.getRotationFromMatrix(object.matrix, object.scale);
-    // new code for Three.js r50+:
-    object.rotation.setEulerFromRotationMatrix(object.matrix);
-}
-
-var rotWorldMatrix;
-// Rotate an object around an arbitrary axis in world space       
-function rotateAroundWorldAxis(object, axis, radians) {
-    rotWorldMatrix = new THREE.Matrix4();
-    rotWorldMatrix.makeRotationAxis(axis.normalize(), radians);
-
-    // old code for Three.JS pre r54:
-    //  rotWorldMatrix.multiply(object.matrix);
-    // new code for Three.JS r55+:
-    rotWorldMatrix.multiply(object.matrix);                // pre-multiply
-
-    object.matrix = rotWorldMatrix;
-
-    // old code for Three.js pre r49:
-    // object.rotation.getRotationFromMatrix(object.matrix, object.scale);
-    // new code for Three.js r50+:
-    object.rotation.setFromRotationMatrix(object.matrix);
+function onDocumentMouseDown( event ) {
+	mouseDown = true;
 }
