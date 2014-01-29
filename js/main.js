@@ -168,16 +168,7 @@ function init(){
 	
 	var loader = new THREE.ColladaLoader();
 	loader.load('models/airbus-a350-800-man-repos.dae', function (result) {
-		//console.log(result);
 		plane = result.scene;
-		//plane.position.set(-32,-30,-5);
-		
-		// dude i cannot figure out orientation
-		// i feel like i'm buried by snow in an avalanche and can't tell which way to dig
-		// (#snowfall)
-		/* var xAxis = new THREE.Vector3(1,0,0);
-		rotateAroundWorldAxis(mesh, xAxis, Math.PI / 2);*/
-		//console.log(plane);
 		scene.add(plane);
 	});
 	
@@ -230,9 +221,6 @@ function animate() {
 // render the scene
 function render() {
 
-	// update camera controls
-	//cameraControls.update();
-	
 	// rotate the camera around the centerpoint, on the ground plane
 	if(!mouseDown) {
 		theta += 0.3;
