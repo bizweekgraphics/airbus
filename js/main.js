@@ -112,33 +112,7 @@ function init(){
 	scene.add( mesh );
 	*/
 	
-	// fuselage
-	geometry = new THREE.CubeGeometry( 1, 1, 4 );
-	material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true, visible:true } );
-	mesh = new THREE.Mesh( geometry, material );
-	mesh.position.set(0,0,0);
-	mesh.name = "fuselage";
-	scene.add( mesh );	
-
-	// cockpit
-	geometry = new THREE.CubeGeometry( 1, 1, 1 );
-	material = new THREE.MeshBasicMaterial( { color: 0xff00ff, wireframe: true, visible:true } );
-	mesh = new THREE.Mesh( geometry, material );
-	mesh.position.set(0,0,2.5);
-	mesh.name = "cockpit";
-	scene.add( mesh );
-
-	// tail	
-	geometry = new THREE.CubeGeometry( 1, 2, 1 );
-	material = new THREE.MeshBasicMaterial( { color: 0xaaffaa, wireframe: true, visible:true } );
-	mesh = new THREE.Mesh( geometry, material );
-	mesh.position.set(0,.5,-2.5);
-	mesh.name = "tail";
-	scene.add( mesh );
-	
-	
 	//annotations line
-    //scene.add(annotationLine);
     
     annotationLines.fuselage = buildLine("fuselage");
     annotationLines.cockpit = buildLine("cockpit");
@@ -193,11 +167,11 @@ function buildLine(key) {
 }
 
 function setAnnotation(key) {
-			annotationLines["fuselage"].visible = false;
-			annotationLines["tail"].visible = false;
-			annotationLines["cockpit"].visible = false;
-			annotationLines[key].visible = true;
-			$("#annie").html(annotations[key].annotation);
+	annotationLines["fuselage"].visible = false;
+	annotationLines["tail"].visible = false;
+	annotationLines["cockpit"].visible = false;
+	annotationLines[key].visible = true;
+	$("#annie").html(annotations[key].annotation);
 }
 
 // animation loop
@@ -228,48 +202,6 @@ function render() {
 		camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
 		camera.lookAt( scene.position );
 	}
-
-
-	// find intersections
-
-	var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );
-	projector.unprojectVector( vector, camera );
-
-	raycaster.set( camera.position, vector.sub( camera.position ).normalize() );
-
-	var intersects = raycaster.intersectObjects( scene.children );
-
-	if ( intersects.length > 0 ) {
-
-		if ( INTERSECTED != intersects[ 0 ].object ) {
-
-			if ( INTERSECTED ) { 
-				//INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-				console.log("INTERSECTED!");
-			}
-			
-			var key = intersects[ 0 ].object.name;
-			setAnnotation(key);
-			
-			INTERSECTED = intersects[ 0 ].object;
-			//INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-			//INTERSECTED.material.emissive.setHex( 0xff0000 );
-
-		}
-
-	} else {
-
-		if ( INTERSECTED ) {
-			//INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
-			console.log("INTERSECTED 2!");
-		}
-
-		INTERSECTED = null;
-
-	}
-	
-
-
 
 	// actually render the scene
 	renderer.render( scene, camera );
