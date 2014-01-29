@@ -28,11 +28,11 @@ var radius = 7, theta = 0;
 var annotationLines = new Object();
 var highlighted = "";
 var annotations = {
-	"cockpit": {
-		"annotation": "The cockpit's the room where pilots and navigator sit, but that's not important right now.",
+	"nose": {
+		"annotation": "The cockpit's the room where pilots and navigator sit, but that's not important right now. Interior pic goes here.",
 		"coords": [0, .5, 2.5]
 		},
-	"fuselage": {
+	"side": {
 		"annotation": "The fuselage seats four people, or six children. It looks like a big Tylenol.",
 		"coords": [0, .5, 0]
 		},
@@ -40,12 +40,12 @@ var annotations = {
 		"annotation": "The tail is larger than the tails of most monkeys.",
 		"coords": [0, 1, -2]
 		},
-	"left turbine": {
-		"annotation": "The left turbine, manufactured by GE, produces like a million pounds of thrust.",
+	"top": {
+		"annotation": "With a wingspan of 213 feet, the Airbus is, like, pretty wide. TK TK TK blah blah hello.",
 		"coords": [1,, 0 -1]
 		},    	
-	"right turbine": {
-		"annotation": "The right turbine, manufactured by GE, produces like a million pounds of thrust.",
+	"engine": {
+		"annotation": "The twin Rolls-Royce Trent XWB turbofans produce like a million pounds of thrust each. Roughly.",
 		"coords": [1, 0, 1]
 		}
 	};
@@ -107,12 +107,14 @@ function init(){
 	*/
 	
 	//annotations line
+	/*
     annotationLines.fuselage = buildLine("fuselage");
     annotationLines.cockpit = buildLine("cockpit");
     annotationLines.tail = buildLine("tail");
     scene.add(annotationLines.fuselage);
     scene.add(annotationLines.cockpit);
     scene.add(annotationLines.tail);
+	*/
 	
 	/// SKYBOX ///
 	
@@ -173,6 +175,7 @@ function init(){
 
 }
 
+/*
 function buildLine(key) {
 	var material = new THREE.LineBasicMaterial({ color: 0x000000 });
 	var geometry = new THREE.Geometry();
@@ -182,7 +185,6 @@ function buildLine(key) {
     newLine.visible = false;
     return newLine;
 }
-
 function setAnnotation(key) {
 	annotationLines["fuselage"].visible = false;
 	annotationLines["tail"].visible = false;
@@ -190,6 +192,7 @@ function setAnnotation(key) {
 	annotationLines[key].visible = true;
 	$("#annie").html(annotations[key].annotation);
 }
+*/
 
 // animation loop
 function animate() {
@@ -268,24 +271,29 @@ function loadTexture( path ) {
 $("#top").on("click", function(e) {
 	camera.position.set(0,15,0);
 	camera.lookAt( scene.position );
+	$("#annotations").html(annotations.top.annotation);
 });
 
 $("#nose").on("click", function(e) {
 	camera.position.set(0,0,5);
 	camera.lookAt( scene.position );
+	$("#annotations").html(annotations.nose.annotation);	
 });
 
 $("#tail").on("click", function(e) {
 	camera.position.set(0,0,-5);
 	camera.lookAt( scene.position );
+	$("#annotations").html(annotations.tail.annotation);
 });
 
 $("#side").on("click", function(e) {
 	camera.position.set(-10,0,0);
 	camera.lookAt( scene.position );
+	$("#annotations").html(annotations.side.annotation);
 });
 
 $("#engine").on("click", function(e) {
 	camera.position.set(2.5,-.5,2.5);
 	camera.lookAt( scene.position );
+	$("#annotations").html(annotations.engine.annotation);
 });
