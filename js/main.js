@@ -96,12 +96,6 @@ function init(){
 
 	// transparently support window resize
 	THREEx.WindowResize.bind(renderer, camera);
-	// allow 'p' to make screenshot
-	THREEx.Screenshot.bindKey(renderer);
-	// allow 'f' to go fullscreen where this feature is supported
-	if( THREEx.FullScreen.available() ){
-		THREEx.FullScreen.bindKey();		
-	}
 
 	// for reference, cube at center
 	/*
@@ -113,15 +107,40 @@ function init(){
 	*/
 	
 	//annotations line
-    
     annotationLines.fuselage = buildLine("fuselage");
     annotationLines.cockpit = buildLine("cockpit");
     annotationLines.tail = buildLine("tail");
-    
     scene.add(annotationLines.fuselage);
     scene.add(annotationLines.cockpit);
     scene.add(annotationLines.tail);
-		
+	
+	/// SKYBOX ///
+	
+	var mesh
+	texture_placeholder = document.createElement( 'canvas' );
+	texture_placeholder.width = 128;
+	texture_placeholder.height = 128;
+
+	var context = texture_placeholder.getContext( '2d' );
+	context.fillStyle = 'rgb( 200, 200, 200 )';
+	context.fillRect( 0, 0, texture_placeholder.width, texture_placeholder.height );
+
+	var materials = [
+
+		loadTexture( 'img/skybox/px.jpg' ), // right
+		loadTexture( 'img/skybox/nx.jpg' ), // left
+		loadTexture( 'img/skybox/py.jpg' ), // top
+		loadTexture( 'img/skybox/ny.jpg' ), // bottom
+		loadTexture( 'img/skybox/pz.jpg' ), // back
+		loadTexture( 'img/skybox/nz.jpg' )  // front
+
+	];
+
+	mesh = new THREE.Mesh( new THREE.CubeGeometry( 300, 300, 300, 7, 7, 7 ), new THREE.MeshFaceMaterial( materials ) );
+	mesh.scale.x = - 1;
+	scene.add( mesh );
+	
+	
 	// Create lights
 	
 	var light = new THREE.PointLight(0xEEEEEE);
@@ -148,8 +167,6 @@ function init(){
 	
 	
 	// from three.js/examples/webgl_interactive_cubes.html
-	projector = new THREE.Projector();
-	raycaster = new THREE.Raycaster();
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	window.addEventListener( 'resize', onWindowResize, false );
@@ -227,4 +244,25 @@ function onDocumentMouseMove( event ) {
 
 function onDocumentMouseDown( event ) {
 	mouseDown = true;
+}
+
+
+
+
+function loadTexture( path ) {
+
+	var texture = new THREE.Texture( texture_placeholder );
+	var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: true } );
+
+	var image = new Image();
+	image.onload = function () {
+
+		texture.image = this;
+		texture.needsUpdate = true;
+
+	};
+	image.src = path;
+
+	return material;
+
 }
