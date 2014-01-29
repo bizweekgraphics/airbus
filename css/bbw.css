@@ -22,7 +22,7 @@ a {
 	font-size: 100%;
 	vertical-align: baseline;
 	display: block;
-	position: relative;
+	position: absolute;
 	float: left;
 	width: 477px;
 	height: 60px;
@@ -42,7 +42,7 @@ a {
 #logo a#home_link {
 	width: 427px;
 	height: 33px;
-	background: url(../img/logosprite-transparent.png) no-repeat;
+	background: url(../img/logosprite-transparent.png?v=1) no-repeat;
 	background-position: 0 -145px;
 }
 
