@@ -163,8 +163,15 @@ function init(){
 	
 	var loader = new THREE.ColladaLoader();
 	loader.load('models/airbus-a350-800-man-repos.dae', function (result) {
+		//readyCallback
+		$("#progress").removeAttr("value");
 		plane = result.scene;
 		scene.add(plane);
+		$("#progress").remove();
+	}, function (result) {
+		//progressCallback
+		$("#progress").attr("value",result.loaded);
+		$("#progress").attr("max",result.total);
 	});
 	
 	
