@@ -83,9 +83,9 @@ function init(){
 
 	// put a camera in the scene
 	camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
-	camera.position.set(-50,-50,0);
-	camera.up = new THREE.Vector3(0,0,1);
-	camera.lookAt(scene.position);
+	camera.position.set(0,0,5);
+	//camera.up = new THREE.Vector3(0,0,1);
+	//camera.lookAt(scene.position);
 	scene.add(camera);
 
 	// create a camera contol
@@ -110,7 +110,7 @@ function init(){
 	mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
 	scene.add( mesh );	
 	*/
-	
+	/*
 	// fuselage
 	geometry = new THREE.CubeGeometry( 10, 40, 10 );
 	material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true, visible:false } );
@@ -134,11 +134,11 @@ function init(){
 	mesh.position.set(0,25,5);
 	mesh.name = "tail";
 	scene.add( mesh );
-	
+	*/
 	
 	//annotations line
     //scene.add(annotationLine);
-    
+    /*
     annotationLines.fuselage = buildLine("fuselage");
     annotationLines.cockpit = buildLine("cockpit");
     annotationLines.tail = buildLine("tail");
@@ -146,8 +146,9 @@ function init(){
     scene.add(annotationLines.fuselage);
     scene.add(annotationLines.cockpit);
     scene.add(annotationLines.tail);
-		
+		*/
 	// Create lights
+	
 	var light = new THREE.PointLight(0xEEEEEE);
 	light.position.set(-20, 0, 20);
 	light.intensity = 1;
@@ -165,10 +166,17 @@ function init(){
 	
 	
 	var loader = new THREE.ColladaLoader();
-	loader.load('models/airbus-a350-800.dae', function (result) {
-		console.log(result);
+	loader.load('models/a350-repositioned.dae', function (result) {
+		//console.log(result);
 		plane = result.scene;
-		plane.position.set(-32,-30,-5);
+		//plane.position.set(-32,-30,-5);
+		
+		// dude i cannot figure out orientation
+		// i feel like i'm buried by snow in an avalanche and can't tell which way to dig
+		// (#snowfall)
+		/* var xAxis = new THREE.Vector3(1,0,0);
+		rotateAroundWorldAxis(mesh, xAxis, Math.PI / 2);*/
+		//console.log(plane);
 		scene.add(plane);
 	});
 	
@@ -224,10 +232,10 @@ function render() {
 	//cameraControls.update();
 	
 	// rotate the camera around the centerpoint, on the ground plane
-	theta += 0.3;
-	camera.position.x = radius * Math.cos( THREE.Math.degToRad( theta ) );
-	camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
-	camera.lookAt( scene.position );
+	//theta += 0.3;
+	//camera.position.x = radius * Math.cos( THREE.Math.degToRad( theta ) );
+	//camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
+	//camera.lookAt( scene.position );
 
 
 
@@ -294,3 +302,42 @@ function onDocumentMouseMove( event ) {
 
 }
 
+
+// Rotation functions by Cory Gross
+// http://stackoverflow.com/a/11060965/120290
+
+// Rotate an object around an arbitrary axis in object space
+var rotObjectMatrix;
+function rotateAroundObjectAxis(object, axis, radians) {
+    rotObjectMatrix = new THREE.Matrix4();
+    rotObjectMatrix.makeRotationAxis(axis.normalize(), radians);
+
+    // old code for Three.JS pre r54:
+    // object.matrix.multiplySelf(rotObjectMatrix);      // post-multiply
+    // new code for Three.JS r55+:
+    object.matrix.multiply(rotObjectMatrix);
+
+    // old code for Three.js pre r49:
+    // object.rotation.getRotationFromMatrix(object.matrix, object.scale);
+    // new code for Three.js r50+:
+    object.rotation.setEulerFromRotationMatrix(object.matrix);
+}
+
+var rotWorldMatrix;
+// Rotate an object around an arbitrary axis in world space       
+function rotateAroundWorldAxis(object, axis, radians) {
+    rotWorldMatrix = new THREE.Matrix4();
+    rotWorldMatrix.makeRotationAxis(axis.normalize(), radians);
+
+    // old code for Three.JS pre r54:
+    //  rotWorldMatrix.multiply(object.matrix);
+    // new code for Three.JS r55+:
+    rotWorldMatrix.multiply(object.matrix);                // pre-multiply
+
+    object.matrix = rotWorldMatrix;
+
+    // old code for Three.js pre r49:
+    // object.rotation.getRotationFromMatrix(object.matrix, object.scale);
+    // new code for Three.js r50+:
+    object.rotation.setFromRotationMatrix(object.matrix);
+}
