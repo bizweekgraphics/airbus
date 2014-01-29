@@ -104,7 +104,7 @@ function init(){
 
 	// for reference, cube at center
 	/*
-	geometry = new THREE.CubeGeometry( 10, 10, 10 );
+	geometry = new THREE.CubeGeometry( 2, 2, 2 );
 	//material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
 	//mesh = new THREE.Mesh( geometry, material );
 	mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
@@ -166,7 +166,7 @@ function init(){
 	
 	
 	var loader = new THREE.ColladaLoader();
-	loader.load('models/a350-repositioned.dae', function (result) {
+	loader.load('models/airbus-a350-800-man-repos.dae', function (result) {
 		//console.log(result);
 		plane = result.scene;
 		//plane.position.set(-32,-30,-5);
