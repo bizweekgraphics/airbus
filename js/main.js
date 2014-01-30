@@ -16,7 +16,7 @@ $( document ).ready(function() {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 var stats, scene, renderer;
-var camera, controls;
+var camera, controls, lastCameraPosition;
 var plane;
 
 var camera, scene, projector, raycaster, renderer;
@@ -276,8 +276,34 @@ function loadTexture( path ) {
 }
 
 $("#top").on("click", function(e) {
-	camera.position.set(0,15,0);
-	camera.lookAt( scene.position );
+	
+	lastCameraPosition = camera.position;
+	newCameraPosition = {x:0,y:15,z:0};
+	
+	/*
+	<script src="js/libs/tween.min.js"></script>
+	http://mrdoob.github.io/three.js/examples/canvas_interactive_cubes_tween.html
+	http://stackoverflow.com/questions/9094971/threejs-rotation-animation
+	*/
+	
+	/*
+	$("#top").attr("opacity",0);
+	$("#top").animate({
+		opacity: 1
+	}, {
+		duration: 10000,
+		step: function( now, fx ) {
+			camera.position.set(
+				lastCameraPosition.x+(newCameraPosition.x-lastCameraPosition.x)*now,
+				lastCameraPosition.y+(newCameraPosition.y-lastCameraPosition.y)*now,
+				lastCameraPosition.z+(newCameraPosition.z-lastCameraPosition.z)*now
+			);
+			camera.lookAt( scene.position );
+		}
+	});
+	*/
+	
+	//camera.position.set(0,15,0);
 	$("#annotations").html(annotations.top.annotation);
 });
 
