@@ -229,7 +229,10 @@ function render() {
 		camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
 		camera.lookAt( scene.position );
 	}
-
+	
+	TWEEN.update();
+	camera.lookAt( scene.position );
+	
 	// actually render the scene
 	renderer.render( scene, camera );
 }
@@ -275,58 +278,37 @@ function loadTexture( path ) {
 
 }
 
-$("#top").on("click", function(e) {
-	
-	lastCameraPosition = camera.position;
-	newCameraPosition = {x:0,y:15,z:0};
-	
-	/*
-	<script src="js/libs/tween.min.js"></script>
-	http://mrdoob.github.io/three.js/examples/canvas_interactive_cubes_tween.html
-	http://stackoverflow.com/questions/9094971/threejs-rotation-animation
-	*/
-	
-	/*
-	$("#top").attr("opacity",0);
-	$("#top").animate({
-		opacity: 1
-	}, {
-		duration: 10000,
-		step: function( now, fx ) {
-			camera.position.set(
-				lastCameraPosition.x+(newCameraPosition.x-lastCameraPosition.x)*now,
-				lastCameraPosition.y+(newCameraPosition.y-lastCameraPosition.y)*now,
-				lastCameraPosition.z+(newCameraPosition.z-lastCameraPosition.z)*now
-			);
-			camera.lookAt( scene.position );
-		}
-	});
-	*/
-	
-	//camera.position.set(0,15,0);
+$("#top").on("click", function(e) {	
+	newCameraPosition = {x:0,y:15,z:1};
+	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
+					.easing( TWEEN.Easing.Quadratic.Out).start();
 	$("#annotations").html(annotations.top.annotation);
 });
 
 $("#nose").on("click", function(e) {
-	camera.position.set(0,0,5);
-	camera.lookAt( scene.position );
+	newCameraPosition = {x:0,y:0,z:7};
+	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
+					.easing( TWEEN.Easing.Quadratic.Out).start();
 	$("#annotations").html(annotations.nose.annotation);	
 });
 
 $("#tail").on("click", function(e) {
-	camera.position.set(0,0,-5);
-	camera.lookAt( scene.position );
+	newCameraPosition = {x:0,y:0,z:-7};
+	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
+					.easing( TWEEN.Easing.Quadratic.Out).start();
 	$("#annotations").html(annotations.tail.annotation);
 });
 
 $("#side").on("click", function(e) {
-	camera.position.set(-10,0,0);
-	camera.lookAt( scene.position );
+	newCameraPosition = {x:-10,y:0,z:0};
+	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
+					.easing( TWEEN.Easing.Quadratic.Out).start();
 	$("#annotations").html(annotations.side.annotation);
 });
 
 $("#engine").on("click", function(e) {
-	camera.position.set(2.5,-.5,2.5);
-	camera.lookAt( scene.position );
+	newCameraPosition = {x:2.5,y:-.5,z:2.5};
+	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
+					.easing( TWEEN.Easing.Quadratic.Out).start();
 	$("#annotations").html(annotations.engine.annotation);
 });
