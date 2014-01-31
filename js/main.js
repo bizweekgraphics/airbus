@@ -17,7 +17,7 @@ $( document ).ready(function() {
 
 var stats, scene, renderer;
 var camera, controls, lastCameraPosition;
-var plane;
+var plane, text3d; //will be loaded from .dae (collada) files
 
 var camera, scene, projector, raycaster, renderer;
 
@@ -82,7 +82,9 @@ function init(){
 	// create a scene
 	scene = new THREE.Scene();
 
-	// put a camera in the scene
+	// CAMERA
+	
+	// place camera in scene
 	camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
 	camera.position.set(-4,2,8);
 	//camera.up = new THREE.Vector3(0,0,1);
@@ -142,8 +144,7 @@ function init(){
 	mesh.scale.x = - 1;
 	scene.add( mesh );
 	
-	
-	// Create lights
+	// LIGHTING
 	
 	var light = new THREE.PointLight(0xEEEEEE);
 	light.position.set(-20, 0, 20);
@@ -160,9 +161,13 @@ function init(){
 	light3.intensity = .5;
 	scene.add(light3);
 	
-	//scene.add(drawLine([0,2.5,2],[0,-2.5,2]));
+	scene.add(drawLine([3.9,-1,-.5],[-3.9,-1,-.5]));
+	scene.add(drawLine([0,-1,3.8],[0,-1,-4]));
 	
-	var loader = new THREE.ColladaLoader();
+	// LOAD STUFF
+  var loader = new THREE.ColladaLoader();
+	
+	// load plane model
 	loader.load('models/airbus-a350-800-man-repos.dae', function (result) {
 		//readyCallback
 		$("#progress").removeAttr("value");
@@ -175,6 +180,17 @@ function init(){
 		$("#progress").attr("max",result.total);
 	});
 	
+	// load plane model
+	loader.load('models/text-rastered.dae', function (result) {
+		//readyCallback
+		text3d = result.scene;
+		text3d.children[0].position.set(-1,-1,1);
+		text3d.children[0].scale.set(0.3, 0.3, 0.3);
+		console.log(text3d);
+		scene.add(text3d);
+	}, function (result) {
+		//progressCallback
+	});
 	
 	// from three.js/examples/webgl_interactive_cubes.html
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -189,7 +205,7 @@ function drawLine(from, to) {
   geometry.vertices.push(new THREE.Vector3(from[0], from[1], from[2]));
   geometry.vertices.push(new THREE.Vector3(to[0], to[1], to[2]));
   var newLine = new THREE.Line(geometry, material);
-  newLine.visible = false;
+  newLine.visible = true;
   return newLine;
 }
 
