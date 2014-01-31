@@ -161,8 +161,13 @@ function init(){
 	light3.intensity = .5;
 	scene.add(light3);
 	
-	scene.add(drawLine([3.9,-1,-.5],[-3.9,-1,-.5]));
-	scene.add(drawLine([0,-1,3.8],[0,-1,-4]));
+	// DRAW ANNOTATION LINES
+	
+	annotationLines.fuselage = drawLine([0,-1,3.8],[0,-1,-4],false);
+  scene.add(annotationLines.fuselage);
+  
+	annotationLines.wingspan = drawLine([3.9,-1,-.5],[-3.9,-1,-.5],false);
+	scene.add(annotationLines.wingspan);
 	
 	// LOAD STUFF
   var loader = new THREE.ColladaLoader();
@@ -184,9 +189,21 @@ function init(){
 	loader.load('models/text-rastered.dae', function (result) {
 		//readyCallback
 		text3d = result.scene;
-		text3d.children[0].position.set(-1,-1,1);
-		text3d.children[0].scale.set(0.3, 0.3, 0.3);
-		console.log(text3d);
+		text3d.scale.set(0.3, 0.3, 0.3);
+		
+		//wingspan
+		text3d.children[0].position.set(-6,-4,-2); 
+		
+    //length
+		text3d.children[1].rotation.set(-Math.PI/2,0,0); 
+		text3d.children[1].position.set(2,4,-4);
+		
+		//width
+		text3d.children[2].rotation.set(0,-Math.PI/2,0); 
+		text3d.children[2].position.set(0,-4,0);
+				
+		annotationsVisibility(false);
+		
 		scene.add(text3d);
 	}, function (result) {
 		//progressCallback
@@ -199,13 +216,21 @@ function init(){
 
 }
 
-function drawLine(from, to) {
-  var material = new THREE.LineBasicMaterial({ color: 0x000000 });
+function annotationsVisibility(boolmeonce) {
+		text3d.children[0].visible = boolmeonce;
+		text3d.children[1].visible = boolmeonce;
+		text3d.children[2].visible = boolmeonce;
+		annotationLines.fuselage.visible = boolmeonce;
+		annotationLines.wingspan.visible = boolmeonce;
+}
+
+function drawLine(from, to, visible) {
+  var material = new THREE.LineBasicMaterial({ color: 0xffffff });
   var geometry = new THREE.Geometry();
   geometry.vertices.push(new THREE.Vector3(from[0], from[1], from[2]));
   geometry.vertices.push(new THREE.Vector3(to[0], to[1], to[2]));
   var newLine = new THREE.Line(geometry, material);
-  newLine.visible = true;
+  newLine.visible = visible;
   return newLine;
 }
 
@@ -310,6 +335,7 @@ $("#top").on("click", function(e) {
 	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
 					.easing( TWEEN.Easing.Quadratic.Out).start();
 	$("#annotations").html(annotations.top.annotation);
+	annotationsVisibility(true);
 });
 
 $("#nose").on("click", function(e) {
@@ -317,6 +343,7 @@ $("#nose").on("click", function(e) {
 	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
 					.easing( TWEEN.Easing.Quadratic.Out).start();
 	$("#annotations").html(annotations.nose.annotation);	
+	annotationsVisibility(true);
 });
 
 $("#tail").on("click", function(e) {
@@ -324,6 +351,7 @@ $("#tail").on("click", function(e) {
 	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
 					.easing( TWEEN.Easing.Quadratic.Out).start();
 	$("#annotations").html(annotations.tail.annotation);
+	annotationsVisibility(true);
 });
 
 $("#side").on("click", function(e) {
@@ -331,6 +359,7 @@ $("#side").on("click", function(e) {
 	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
 					.easing( TWEEN.Easing.Quadratic.Out).start();
 	$("#annotations").html(annotations.side.annotation);
+	annotationsVisibility(true);
 });
 
 $("#engine").on("click", function(e) {
@@ -338,4 +367,5 @@ $("#engine").on("click", function(e) {
 	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
 					.easing( TWEEN.Easing.Quadratic.Out).start();
 	$("#annotations").html(annotations.engine.annotation);
+	annotationsVisibility(true);
 });
