@@ -160,6 +160,7 @@ function init(){
 	light3.intensity = .5;
 	scene.add(light3);
 	
+	//scene.add(drawLine([0,2.5,2],[0,-2.5,2]));
 	
 	var loader = new THREE.ColladaLoader();
 	loader.load('models/airbus-a350-800-man-repos.dae', function (result) {
@@ -180,6 +181,16 @@ function init(){
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	window.addEventListener( 'resize', onWindowResize, false );
 
+}
+
+function drawLine(from, to) {
+  var material = new THREE.LineBasicMaterial({ color: 0x000000 });
+  var geometry = new THREE.Geometry();
+  geometry.vertices.push(new THREE.Vector3(from[0], from[1], from[2]));
+  geometry.vertices.push(new THREE.Vector3(to[0], to[1], to[2]));
+  var newLine = new THREE.Line(geometry, material);
+  newLine.visible = false;
+  return newLine;
 }
 
 /*
