@@ -82,7 +82,7 @@ function init(){
 	// create a scene
 	scene = new THREE.Scene();
 
-	// CAMERA
+	/// CAMERA ///
 	
 	// place camera in scene
 	camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -91,7 +91,7 @@ function init(){
 	camera.lookAt(scene.position);
 	scene.add(camera);
 
-	// create a camera contol
+	// create a camera control
 	// cf. view-source:http://threejs.org/examples/misc_controls_orbit.html
 	controls = new THREE.OrbitControls( camera );
 	controls.addEventListener( 'change', render );
@@ -99,24 +99,11 @@ function init(){
 	// transparently support window resize
 	THREEx.WindowResize.bind(renderer, camera);
 
-	// for reference, cube at center
-	/*
+	/* REFERENCE CUBE
 	geometry = new THREE.CubeGeometry( 1, 1, 1 );
 	material = new THREE.MeshBasicMaterial( { color: 0x0000ff, wireframe: true } );
 	mesh = new THREE.Mesh( geometry, material );
-	//mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
-	scene.add( mesh );
-	*/
-	
-	//annotations line
-	/*
-    annotationLines.fuselage = buildLine("fuselage");
-    annotationLines.cockpit = buildLine("cockpit");
-    annotationLines.tail = buildLine("tail");
-    scene.add(annotationLines.fuselage);
-    scene.add(annotationLines.cockpit);
-    scene.add(annotationLines.tail);
-	*/
+	scene.add( mesh ); */
 	
 	/// SKYBOX ///
 	
@@ -233,25 +220,6 @@ function drawLine(from, to, visible) {
   newLine.visible = visible;
   return newLine;
 }
-
-/*
-function buildLine(key) {
-	var material = new THREE.LineBasicMaterial({ color: 0x000000 });
-	var geometry = new THREE.Geometry();
-    geometry.vertices.push(new THREE.Vector3(0, 25, 0));
-    geometry.vertices.push(new THREE.Vector3(annotations[key].coords[0], annotations[key].coords[1], annotations[key].coords[2]));
-    var newLine = new THREE.Line(geometry, material);
-    newLine.visible = false;
-    return newLine;
-}
-function setAnnotation(key) {
-	annotationLines["fuselage"].visible = false;
-	annotationLines["tail"].visible = false;
-	annotationLines["cockpit"].visible = false;
-	annotationLines[key].visible = true;
-	$("#annie").html(annotations[key].annotation);
-}
-*/
 
 // animation loop
 function animate() {
