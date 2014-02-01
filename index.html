@@ -26,15 +26,30 @@
 				<a href="http://www.twitter.com/bizweekgraphics">Graphics</a>
 			</h2>
 		</div>
-		<div id="views">
-			<div id="top" style="background-image: url(img/thumb-top.png);"></div>
-			<div id="nose" style="background-image: url(img/thumb-nose.png);background-size:cover;"></div>
-			<div id="side" style="background-image: url(img/thumb-side.png);"></div>
-			<div id="tail" style="background-image: url(img/thumb-tail.png);background-size:cover;"></div>
-			<div id="engine" style="background-image: url(img/thumb-engine.png);"></div>
+		
+		<div id="sidebar">
+		  <div id="view-block" class="sidebar-block">
+        <h3>Views</h3>
+        <div id="view-tabs">
+          <div class="tab" id="top" style="background-image: url(img/thumb-top.png);"></div>
+          <div class="tab" id="nose" style="background-image: url(img/thumb-nose.png);background-size:cover;"></div>
+          <div class="tab" id="side" style="background-image: url(img/thumb-side.png);"></div>
+          <div class="tab" id="tail" style="background-image: url(img/thumb-tail.png);background-size:cover;"></div>
+          <div class="tab" id="engine" style="background-image: url(img/thumb-engine.png);"></div>
+        </div>
+        <div id="view-notes"></div>
+      </div>
+		  <div id="data-block" class="sidebar-block">
+        <h3>Data</h3>
+        <div id="data-tabs">
+          <div class="tab" id="stock" style="background-image: url(img/thumb-side.png);"></div>
+        </div>
+        <div id="data-notes"></div>
+      </div>
 		</div>
-		<div id="annotations">The Airbus A350 XWB is the European aerospace giant's new flagship competitor to Boeing's Dreamliner, or something like that. Click above to learn more.</div>
-		<progress id="progress" style="position:absolute;display:block;left:40%;top:50%;width:20%;" value="0" max="100"></progress>
+		
+		<progress id="progress" value="0" max="100"></progress>
+		
 		<div id="container"></div>
 		
 		<script src="js/threejs/three.min.js"></script>

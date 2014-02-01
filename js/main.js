@@ -1,20 +1,3 @@
-// from http://stackoverflow.com/a/326076/120290
-function inIframe() {
-    try {
-        return window.self !== window.top;
-    } catch(err) {
-        return true;
-    }
-}
-
-$( document ).ready(function() {  
-  if(inIframe()) $("body").addClass("iframed");
-});
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// THREE.JS //////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
-
 /* COORDINATE SYSTEM:
 x+: plane to its left
 y+: plane altitude up
@@ -33,29 +16,35 @@ var radius = 7, theta = 0; // for onload camera wander
 var animating, t = 0; // for animating plane along path
 
 var annotationLines = new Object();
-var highlighted = "";
-var annotations = {
+var views = {
 	"nose": {
-		"annotation": "The cockpit's the room where pilots and navigator sit, but that's not important right now. Interior pic goes here.",
-		"coords": [0, .5, 2.5]
+		"notes": "The cockpit's the room where pilots and navigator sit, but that's not important right now. Interior pic goes here.",
+		"camera": {x:0,y:0,z:7}
 		},
 	"side": {
-		"annotation": "The fuselage seats four people, or six children. It looks like a big Tylenol.",
-		"coords": [0, .5, 0]
+		"notes": "The fuselage seats four people, or six children. It looks like a big Tylenol.",
+		"camera": {x:-7.5,y:0,z:0}
 		},
 	"tail": {
-		"annotation": "The tail is larger than the tails of most monkeys.",
-		"coords": [0, 1, -2]
+		"notes": "The tail is larger than the tails of most monkeys.",
+		"camera": {x:0,y:0,z:-7}
 		},
 	"top": {
-		"annotation": "With a wingspan of 213 feet, the Airbus is, like, pretty wide. TK TK TK blah blah hello.",
-		"coords": [1,, 0 -1]
+		"notes": "With a wingspan of 213 feet, the Airbus is, like, pretty wide. TK TK TK blah blah hello.",
+		"camera": {x:0,y:15,z:1}
 		},    	
 	"engine": {
-		"annotation": "The twin Rolls-Royce Trent XWB turbofans produce like a million pounds of thrust each. Roughly.",
-		"coords": [1, 0, 1]
+		"notes": "The twin Rolls-Royce Trent XWB turbofans produce like a million pounds of thrust each. Roughly.",
+		"camera": {x:2.5,y:-.5,z:2.5}
 		}
 	};
+
+var data = {
+  "stock": {
+    "notes": "Airbus stock blah blah...",
+		"camera": {x:-200,y:0,z:0}
+    }
+  };
 
 if( !init() )	animate();
 
@@ -179,7 +168,7 @@ function init(){
 		$("#progress").attr("max",result.total);
 	});
 	
-	// load plane model
+	// load 3d text annotations
 	loader.load('models/text-rastered.dae', function (result) {
 		//readyCallback
 		text3d = result.scene;
@@ -208,24 +197,6 @@ function init(){
 	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 	window.addEventListener( 'resize', onWindowResize, false );
 
-}
-
-function annotationsVisibility(boolmeonce) {
-		text3d.children[0].visible = boolmeonce;
-		text3d.children[1].visible = boolmeonce;
-		text3d.children[2].visible = boolmeonce;
-		annotationLines.fuselage.visible = boolmeonce;
-		annotationLines.wingspan.visible = boolmeonce;
-}
-
-function drawLine(from, to, visible) {
-  var material = new THREE.LineBasicMaterial({ color: 0xffffff });
-  var geometry = new THREE.Geometry();
-  geometry.vertices.push(new THREE.Vector3(from[0], from[1], from[2]));
-  geometry.vertices.push(new THREE.Vector3(to[0], to[1], to[2]));
-  var newLine = new THREE.Line(geometry, material);
-  newLine.visible = visible;
-  return newLine;
 }
 
 // animation loop
@@ -268,86 +239,21 @@ function render() {
 	renderer.render( scene, camera );
 }
 
-function onWindowResize() {
-
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
-
-	renderer.setSize( window.innerWidth, window.innerHeight );
-
-}
-
-function onDocumentMouseMove( event ) {
-
-	event.preventDefault();
-
-	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
-}
-
-function onDocumentMouseDown( event ) {
-	mouseDown = true;
-}
-
-// for skybox
-function loadTexture( path ) {
-
-	var texture = new THREE.Texture( texture_placeholder );
-	var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: true } );
-
-	var image = new Image();
-	image.onload = function () {
-
-		texture.image = this;
-		texture.needsUpdate = true;
-
-	};
-	image.src = path;
-
-	return material;
-
-}
-
-$("#top").on("click", function(e) {	
-	newCameraPosition = {x:0,y:15,z:1};
-	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
+$("#view-block .tab").on("click", function(e) {
+  var key = $(this).attr("id");
+	new TWEEN.Tween( camera.position ).to( views[key].camera, 200 )
 					.easing( TWEEN.Easing.Quadratic.Out).start();
-	$("#annotations").html(annotations.top.annotation);
-	annotationsVisibility(true);
+	$("#view-notes").html(views[key].notes);
+	annotationsVisibility(true);  
 });
 
-$("#nose").on("click", function(e) {
-	newCameraPosition = {x:0,y:0,z:7};
-	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
+$("#data-block .tab").on("click", function(e) {
+  var key = $(this).attr("id");
+	new TWEEN.Tween( camera.position ).to( data[key].camera, 200 )
 					.easing( TWEEN.Easing.Quadratic.Out).start();
-	$("#annotations").html(annotations.nose.annotation);	
-	annotationsVisibility(true);
-});
-
-$("#tail").on("click", function(e) {
-	newCameraPosition = {x:0,y:0,z:-7};
-	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
-					.easing( TWEEN.Easing.Quadratic.Out).start();
-	$("#annotations").html(annotations.tail.annotation);
-	annotationsVisibility(true);
-});
-
-$("#side").on("click", function(e) {
-	newCameraPosition = {x:-200,y:0,z:0};
-	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
-					.easing( TWEEN.Easing.Quadratic.Out).start();
-	$("#annotations").html(annotations.side.annotation);
-	annotationsVisibility(false);
+	$("#data-notes").html(data[key].notes);
+	annotationsVisibility(false);  
 	animating = true;
-});
-
-$("#engine").on("click", function(e) {
-	newCameraPosition = {x:2.5,y:-.5,z:2.5};
-	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
-					.easing( TWEEN.Easing.Quadratic.Out).start();
-	$("#annotations").html(annotations.engine.annotation);
-	annotationsVisibility(true);
 });
 
 function animatePlane() {
@@ -356,4 +262,51 @@ function animatePlane() {
   //plane.rotation.set(-Math.PI/4,0,0); //tilts plane nose-up by 45deg
   plane.rotation.set(-10*c*Math.cos(c*t),0,0);
   t += 0.25;
+}
+
+function annotationsVisibility(boolmeonce) {
+  text3d.children[0].visible = boolmeonce;
+  text3d.children[1].visible = boolmeonce;
+  text3d.children[2].visible = boolmeonce;
+  annotationLines.fuselage.visible = boolmeonce;
+  annotationLines.wingspan.visible = boolmeonce;
+}
+
+function drawLine(from, to, visible) {
+  var material = new THREE.LineBasicMaterial({ color: 0xffffff });
+  var geometry = new THREE.Geometry();
+  geometry.vertices.push(new THREE.Vector3(from[0], from[1], from[2]));
+  geometry.vertices.push(new THREE.Vector3(to[0], to[1], to[2]));
+  var newLine = new THREE.Line(geometry, material);
+  newLine.visible = visible;
+  return newLine;
+}
+
+function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+}
+
+function onDocumentMouseMove( event ) {
+	event.preventDefault();
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+}
+
+function onDocumentMouseDown( event ) {
+	mouseDown = true;
+}
+
+// for skybox
+function loadTexture( path ) {
+	var texture = new THREE.Texture( texture_placeholder );
+	var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: true } );
+	var image = new Image();
+	image.onload = function () {
+		texture.image = this;
+		texture.needsUpdate = true;
+	};
+	image.src = path;
+	return material;
 }

@@ -3,6 +3,7 @@ body {
 	color: #444444;
 	font-family: sans-serif;
 	line-height: 1.231;
+	font-family: Helvetica, sans-serif;
 }
 
 body.dark_layout {
@@ -26,7 +27,7 @@ a {
 	float: left;
 	width: 477px;
 	height: 60px;
-	margin: 10px 0;
+	margin: 15px;
 }
 
 .iframed #logo {
@@ -167,20 +168,41 @@ body {
 	padding		: 5px;
 }
 
-/* ANNOTATIONS */
+/* SIDEBAR */
 
-#views {
-	position: absolute;
-	top: 20px;
-	right: 20px;
-	width: 300px;
-	height: 60px;
-	box-sizing: border-box;
+h3 { 
+  font-family:BWHaasHead; 
+  text-align: center;
+  margin: 5px 0;
 }
 
-#views div {
-	width:60px;
-	height:60px;
+#sidebar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 300px;
+	padding:10px;
+}
+
+.sidebar-block {
+	border: 3px solid black; 
+	background: magenta;
+	margin: 0 0 20px 0;
+	min-height: 93px;
+}
+
+#view-tabs, #data-tabs {
+  margin: 5px 5px;
+}
+
+#view-notes, #data-notes {
+  padding: 10px;
+  font-size: 11pt;
+}
+
+.tab {
+	width:56px;
+	height:56px;
 	float:left;
 	background-size: contain;
 	background-repeat:no-repeat;
@@ -189,12 +211,20 @@ body {
 	cursor: pointer;
 }
 
-#annotations {
-	position: absolute;
-	top:90px; 
-	right: 20px;
+.tab:hover {
+  background-color: #0ff;
+}
+
+#notes {
 	padding: 10px;
-	border: 1px solid black; 
 	width: 300px;
 	box-sizing: border-box;
+}
+
+#progress {
+  position:absolute;
+  display:block;
+  left:40%;
+  top:50%;
+  width:20%;
 }
