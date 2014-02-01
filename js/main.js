@@ -15,6 +15,12 @@ $( document ).ready(function() {
 // THREE.JS //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
+/* COORDINATE SYSTEM:
+x+: plane to its left
+y+: plane altitude up
+z+: plane forward
+*/
+
 var stats, scene, renderer;
 var camera, controls, lastCameraPosition;
 var plane, text3d; //will be loaded from .dae (collada) files
@@ -23,7 +29,8 @@ var camera, scene, projector, raycaster, renderer;
 
 var mouseDown = false;
 var mouse = new THREE.Vector2(), INTERSECTED;
-var radius = 7, theta = 0;
+var radius = 7, theta = 0; // for onload camera wander
+var animating, t = 0; // for animating plane along path
 
 var annotationLines = new Object();
 var highlighted = "";
@@ -232,6 +239,10 @@ function animate() {
 	// ?
 	controls.update();
 	
+	if(animating) {
+    animatePlane();
+	}
+	
 	// do the render
 	render();
 
@@ -323,11 +334,12 @@ $("#tail").on("click", function(e) {
 });
 
 $("#side").on("click", function(e) {
-	newCameraPosition = {x:-10,y:0,z:0};
+	newCameraPosition = {x:-200,y:0,z:0};
 	new TWEEN.Tween( camera.position ).to( newCameraPosition, 200 )
 					.easing( TWEEN.Easing.Quadratic.Out).start();
 	$("#annotations").html(annotations.side.annotation);
-	annotationsVisibility(true);
+	annotationsVisibility(false);
+	animating = true;
 });
 
 $("#engine").on("click", function(e) {
@@ -337,3 +349,11 @@ $("#engine").on("click", function(e) {
 	$("#annotations").html(annotations.engine.annotation);
 	annotationsVisibility(true);
 });
+
+function animatePlane() {
+  var c=0.1; //scale factor
+  plane.position.set(0,10*Math.sin(c*t),t);
+  //plane.rotation.set(-Math.PI/4,0,0); //tilts plane nose-up by 45deg
+  plane.rotation.set(-10*c*Math.cos(c*t),0,0);
+  t += 0.25;
+}
