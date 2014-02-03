@@ -42,7 +42,9 @@ var views = {
 var data = {
   "stock": {
     "notes": "Airbus stock blah blah...",
-		"camera": {x:-200,y:0,z:0}
+		"camera": {x:-200,y:0,z:0},
+		"filename": "data-shareprice.js",
+		"chartline": null
     }
   };
 
@@ -247,42 +249,6 @@ $("#view-block .tab").on("click", function(e) {
 	annotationsVisibility(true);  
 });
 
-$("#data-block .tab").on("click", function(e) {
-  var key = $(this).attr("id");
-  
-  $.getScript("data/data-shareprice.js", function(){
-     console.log(sharePrice);
-  });
-  
-	new TWEEN.Tween( camera.position ).to( data[key].camera, 200 )
-					.easing( TWEEN.Easing.Quadratic.Out).start();
-	$("#data-notes").html(data[key].notes);
-	annotationsVisibility(false);  
-	animating = true;
-});
-
-
-function animatePlane() {
-  var domain = [0,10];
-  var range = [0,10];
-  var dpf = 1; //points of data per frame of animation
-  
-  if(typeof sharePrice !== "undefined" && t<sharePrice.length-1) {
-    plane.position.set(0,sharePrice[Math.floor(t)].smavg,t);
-    plane.rotation.set(-Math.atan(sharePrice[Math.floor(t+1)].smavg-sharePrice[Math.floor(t)].smavg),0,0);
-    t += dpf;
-  }
-}
-
-//animates the plane along a sine wave
-function animatePlaneDemo() {
-  var c=0.1; //scale factor
-  plane.position.set(0,10*Math.sin(c*t),t);
-  //plane.rotation.set(-Math.PI/4,0,0); //tilts plane nose-up by 45deg
-  plane.rotation.set(-10*c*Math.cos(c*t),0,0);
-  t += 0.25;
-}
-
 function annotationsVisibility(boolmeonce) {
   text3d.children[0].visible = boolmeonce;
   text3d.children[1].visible = boolmeonce;
@@ -338,4 +304,67 @@ function getDateFromExcel(excelDate) {
   // 1. Subtract number of days between Jan 1, 1900 and Jan 1, 1970, plus 1 (Google "excel leap year bug")             
   // 2. Convert to milliseconds.
 	return new Date((excelDate - (25567 + 1))*86400*1000);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// DATA CHARTING /////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+$("#data-block .tab").on("click", function(e) {
+  
+  // get which data tab was clicked
+  var key = $(this).attr("id");
+  
+  // reposition camera
+	new TWEEN.Tween( camera.position ).to( data[key].camera, 200 )
+					.easing( TWEEN.Easing.Quadratic.Out).start();
+	
+	// show data notes
+	$("#data-notes").html(data[key].notes);
+	
+	// hide annotations
+	annotationsVisibility(false);  
+  
+  // load data
+  $.getScript("data/data-shareprice.js", function(){
+    // initialize chartline
+    var material = new THREE.LineBasicMaterial({ color: 0xffffff });
+    var geometry = new THREE.Geometry();
+    for(i=0; i<sharePrice.length-1; i++) {
+      geometry.vertices.push(new THREE.Vector3(0, 0, 0));
+    }
+    geometry.verticesNeedUpdate = true;
+    geometry.dynamic = true;
+    data.stock.chartline = new THREE.Line(geometry, material);
+    scene.add(data.stock.chartline);
+    animating = true;
+  });  
+});
+
+function animatePlane() {
+  var domain = [0,10];
+  var range = [0,10];
+  var dpf = 1; //points of Data Per Frame of animation
+  
+  // move plane
+  plane.position.set(0,sharePrice[Math.floor(t)].smavg,t);
+  plane.rotation.set(-Math.atan(sharePrice[Math.floor(t+1)].smavg-sharePrice[Math.floor(t)].smavg),0,0);
+  
+  // add vertex to chartline
+  for(i=Math.floor(t); i<sharePrice.length-1; i++) {
+    data.stock.chartline.geometry.vertices[i] = new THREE.Vector3(0,sharePrice[Math.floor(t)].smavg,t);
+  }
+  data.stock.chartline.geometry.verticesNeedUpdate = true;
+  
+  t += dpf;
+  if(t>=sharePrice.length-1) animating = false;
+}
+
+//animates the plane along a sine wave
+function animatePlaneDemo() {
+  var c=0.1; //scale factor
+  plane.position.set(0,10*Math.sin(c*t),t);
+  //plane.rotation.set(-Math.PI/4,0,0); //tilts plane nose-up by 45deg
+  plane.rotation.set(-10*c*Math.cos(c*t),0,0);
+  t += 0.25;
 }
