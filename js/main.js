@@ -352,7 +352,7 @@ function animatePlane() {
   
   // add vertex to chartline
   for(i=Math.floor(t); i<sharePrice.length-1; i++) {
-    data.stock.chartline.geometry.vertices[i] = new THREE.Vector3(0,sharePrice[Math.floor(t)].smavg,t);
+    data.stock.chartline.geometry.vertices[i] = new THREE.Vector3(0,sharePrice[Math.floor(t)].price,t);
   }
   data.stock.chartline.geometry.verticesNeedUpdate = true;
   
