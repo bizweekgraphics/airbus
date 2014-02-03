@@ -261,7 +261,21 @@ $("#data-block .tab").on("click", function(e) {
 	animating = true;
 });
 
+
 function animatePlane() {
+  var domain = [0,10];
+  var range = [0,10];
+  var dpf = 1; //points of data per frame of animation
+  
+  if(typeof sharePrice !== "undefined" && t<sharePrice.length-1) {
+    plane.position.set(0,sharePrice[Math.floor(t)].smavg,t);
+    plane.rotation.set(-Math.atan(sharePrice[Math.floor(t+1)].smavg-sharePrice[Math.floor(t)].smavg),0,0);
+    t += dpf;
+  }
+}
+
+//animates the plane along a sine wave
+function animatePlaneDemo() {
   var c=0.1; //scale factor
   plane.position.set(0,10*Math.sin(c*t),t);
   //plane.rotation.set(-Math.PI/4,0,0); //tilts plane nose-up by 45deg
