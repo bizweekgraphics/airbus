@@ -312,6 +312,9 @@ function getDateFromExcel(excelDate) {
 
 $("#data-block .tab").on("click", function(e) {
   
+  // reset time parameter
+  t = 7;
+  
   // get which data tab was clicked
   var key = $(this).attr("id");
   
@@ -347,8 +350,8 @@ function animatePlane() {
   var dpf = 1; //points of Data Per Frame of animation
   
   // move plane
-  plane.position.set(0,sharePrice[Math.floor(t)].smavg,t);
-  plane.rotation.set(-Math.atan(sharePrice[Math.floor(t+1)].smavg-sharePrice[Math.floor(t)].smavg),0,0);
+  plane.position.set(0,sharePrice[Math.floor(t)].price,t);
+  //plane.rotation.set(-Math.atan(sharePrice[Math.floor(t+1)].smavg-sharePrice[Math.floor(t)].smavg),0,0);
   
   // add vertex to chartline
   for(i=Math.floor(t); i<sharePrice.length-1; i++) {
