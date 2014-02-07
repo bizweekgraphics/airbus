@@ -249,6 +249,20 @@ $("#view-block .tab").on("click", function(e) {
 	annotationsVisibility(true);  
 });
 
+$("#wireframe").on("click", function(e) {
+  plane.traverse(function ( child ) {
+    //irreversible
+    child.material = new THREE.MeshBasicMaterial( { wireframe: true } );
+    
+    /*
+    if(typeof child.material !== "undefined" && typeof child.material.wireframe !== "undefined") {
+      //doesn't set fuselage & lots of other stuff to wireframe
+      //child.material.wireframe = true;      
+    }
+    */
+  } );
+});
+
 function annotationsVisibility(boolmeonce) {
   text3d.children[0].visible = boolmeonce;
   text3d.children[1].visible = boolmeonce;
