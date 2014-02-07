@@ -6,7 +6,7 @@ z+: plane forward
 
 var stats, scene, renderer;
 var camera, controls, lastCameraPosition;
-var plane, text3d; //will be loaded from .dae (collada) files
+var plane, skybox, text3d; //will be loaded from .dae (collada) files
 
 var camera, scene, projector, raycaster, renderer;
 
@@ -105,7 +105,6 @@ function init(){
 	
 	/// SKYBOX ///
 	
-	var mesh
 	texture_placeholder = document.createElement( 'canvas' );
 	texture_placeholder.width = 128;
 	texture_placeholder.height = 128;
@@ -125,9 +124,9 @@ function init(){
 
 	];
 
-	mesh = new THREE.Mesh( new THREE.CubeGeometry( 300, 300, 300, 7, 7, 7 ), new THREE.MeshFaceMaterial( materials ) );
-	mesh.scale.x = - 1;
-	scene.add( mesh );
+	skybox = new THREE.Mesh( new THREE.CubeGeometry( 300, 300, 300, 7, 7, 7 ), new THREE.MeshFaceMaterial( materials ) );
+	skybox.scale.x = - 1;
+	scene.add( skybox );
 	
 	// LIGHTING
 	
@@ -261,6 +260,10 @@ $("#wireframe").on("click", function(e) {
     }
     */
   } );
+});
+
+$("#nobg").on("click", function(e) {
+  scene.remove(skybox);
 });
 
 function annotationsVisibility(boolmeonce) {
