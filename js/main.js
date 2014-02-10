@@ -18,6 +18,36 @@ var animating, t = 0; // for animating plane along path
 var annotationLines = new Object();
 var views = {
 	"nose": {
+		"notes": "During potentially hazardous test flights, crew wear parachutes and are prepared to bail out through an explosive hatch.",
+		"camera": {x:0,y:0,z:7}
+		},
+	"side": {
+		"notes": "Bare of seats and internal fittings, the first flight-test airplane carries dozens of Jacuzzi-sized water jugs to bulk it up to operating weight.",
+		"camera": {x:-7.5,y:0,z:0}
+		},
+	"tail": {
+		"notes": "During the VMU (for “Velocity Minimum Unstick”) test, the pilot raises the nose so sharply during the takeoff roll that the tail hits the ground.",
+		"camera": {x:0,y:0,z:-7}
+		},
+	"wings": {
+		"notes": "Tests to determine the strength of the airplane’s structure proceed until a wing is wrenched from the fuselage.",
+		"camera": {x:0,y:15,z:1}
+		},    	
+	"top": {
+		"notes": "To earn certification from the FAA and its European counterpart, a test plane must fly into stormy weather until substantial ice accumulates on its surface.",
+		"camera": {x:0,y:15,z:1}
+		},    	
+	"engineL": {
+		"notes": "The A350 is designed to fly safely up to seven hours on just one engine.",
+		"camera": {x:2.5,y:-.5,z:2.5}
+		},
+	"engineR": {
+		"notes": "During ground tests, a plane is driven through giant puddles of water to see if the engines flame out.",
+		"camera": {x:2.5,y:.5,z:2.5}
+		}
+	};
+var genericViews = {
+	"nose": {
 		"notes": "The cockpit's the room where pilots and navigator sit, but that's not important right now. Interior pic goes here.",
 		"camera": {x:0,y:0,z:7}
 		},
@@ -168,6 +198,18 @@ function init(){
 		$("#progress").attr("value",result.loaded);
 		$("#progress").attr("max",result.total);
 	});
+
+	// load plane model
+	loader.load('models/airbus-a350-800-man-repos.dae', function (result) {
+		//readyCallback
+		$("#progress").removeAttr("value");
+		plane = result.scene;
+		scene.add(plane);
+		$("#progress").remove();
+	}, function (result) {
+		//progressCallback
+	});
+
 	
 	// load 3d text annotations
 	loader.load('models/text-rastered.dae', function (result) {
