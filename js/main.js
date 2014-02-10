@@ -83,15 +83,6 @@ var genericViews = {
 		}
 	};
 
-var data = {
-  "stock": {
-    "notes": "Airbus stock blah blah...",
-		"camera": {x:-200,y:0,z:0},
-		"filename": "data-shareprice.js",
-		"chartline": null
-    }
-  };
-
 $.each(views, function(key, view) {
   $("#explore-tabs").append('<div class="tab" id="'+key+'" title="'+view.name+'" style="background-image: url(img/thumb-'+key+'.png);"></div>');
 });
@@ -383,61 +374,8 @@ function getDateFromExcel(excelDate) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-// DATA CHARTING /////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
-
-$("#data-block .tab").on("click", function(e) {
-  
-  // reset time parameter
-  t = 7;
-  
-  // get which data tab was clicked
-  var key = $(this).attr("id");
-  
-  // reposition camera
-	new TWEEN.Tween( camera.position ).to( data[key].camera, 200 )
-					.easing( TWEEN.Easing.Quadratic.Out).start();
-	
-	// show data notes
-	$("#data-notes").html(data[key].notes);
-	
-	// hide annotations
-	annotationsVisibility(false);  
-  
-  // load data
-  $.getScript("data/data-shareprice.js", function(){
-    // initialize chartline
-    var material = new THREE.LineBasicMaterial({ color: 0xffffff });
-    var geometry = new THREE.Geometry();
-    for(i=0; i<sharePrice.length-1; i++) {
-      geometry.vertices.push(new THREE.Vector3(0, 0, 0));
-    }
-    geometry.verticesNeedUpdate = true;
-    geometry.dynamic = true;
-    data.stock.chartline = new THREE.Line(geometry, material);
-    scene.add(data.stock.chartline);
-    animating = true;
-  });  
-});
-
-function animatePlane() {
-  var domain = [0,10];
-  var range = [0,10];
-  var dpf = 1; //points of Data Per Frame of animation
-  
-  // move plane
-  plane.position.set(0,sharePrice[Math.floor(t)].price,t);
-  //plane.rotation.set(-Math.atan(sharePrice[Math.floor(t+1)].smavg-sharePrice[Math.floor(t)].smavg),0,0);
-  
-  // add vertex to chartline
-  for(i=Math.floor(t); i<sharePrice.length-1; i++) {
-    data.stock.chartline.geometry.vertices[i] = new THREE.Vector3(0,sharePrice[Math.floor(t)].price,t);
-  }
-  data.stock.chartline.geometry.verticesNeedUpdate = true;
-  
-  t += dpf;
-  if(t>=sharePrice.length-1) animating = false;
-}
+// PLANE ANIMATION  //////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////// (on hold, inert) ///////////////
 
 //animates the plane along a sine wave
 function animatePlaneDemo() {
