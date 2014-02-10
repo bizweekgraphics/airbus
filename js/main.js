@@ -10,7 +10,7 @@ var plane, skybox, text3d; //will be loaded from .dae (collada) files
 
 var camera, scene, projector, raycaster, renderer;
 
-var mouseDown = false;
+var wander = true;
 var mouse = new THREE.Vector2(), INTERSECTED;
 var radius = 7, theta = 0; // for onload camera wander
 var animating, t = 0; // for animating plane along path
@@ -18,32 +18,46 @@ var animating, t = 0; // for animating plane along path
 var annotationLines = new Object();
 var views = {
 	"nose": {
+		"name": "Escape hatch",
 		"notes": "During potentially hazardous test flights, crew wear parachutes and are prepared to bail out through an explosive hatch.",
+		"notes-position": {left:200,top:150},
 		"camera": {x:0,y:0,z:7}
 		},
 	"side": {
+		"name": "Fuselage",
 		"notes": "Bare of seats and internal fittings, the first flight-test airplane carries dozens of Jacuzzi-sized water jugs to bulk it up to operating weight.",
+		"notes-position": {left:200,top:150},
 		"camera": {x:-7.5,y:0,z:0}
 		},
 	"tail": {
+		"name": "Tail",
 		"notes": "During the VMU (for “Velocity Minimum Unstick”) test, the pilot raises the nose so sharply during the takeoff roll that the tail hits the ground.",
+		"notes-position": {left:200,top:150},
 		"camera": {x:0,y:0,z:-7}
 		},
 	"wings": {
+		"name": "Wings",
 		"notes": "Tests to determine the strength of the airplane’s structure proceed until a wing is wrenched from the fuselage.",
+		"notes-position": {left:200,top:150},
 		"camera": {x:0,y:15,z:1}
 		},    	
 	"top": {
+		"name": "Surface",
 		"notes": "To earn certification from the FAA and its European counterpart, a test plane must fly into stormy weather until substantial ice accumulates on its surface.",
+		"notes-position": {left:200,top:150},
 		"camera": {x:0,y:15,z:1}
 		},    	
 	"engineL": {
+		"name": "Left engine",
 		"notes": "The A350 is designed to fly safely up to seven hours on just one engine.",
+		"notes-position": {left:200,top:150},
 		"camera": {x:2.5,y:-.5,z:2.5}
 		},
 	"engineR": {
+		"name": "Right engine",
 		"notes": "During ground tests, a plane is driven through giant puddles of water to see if the engines flame out.",
-		"camera": {x:2.5,y:.5,z:2.5}
+		"notes-position": {left:200,top:150},
+		"camera": {x:-2.5,y:-.5,z:2.5}
 		}
 	};
 var genericViews = {
@@ -77,6 +91,10 @@ var data = {
 		"chartline": null
     }
   };
+
+$.each(views, function(key, view) {
+  $("#explore-tabs").append('<div class="tab" id="'+key+'" title="'+view.name+'" style="background-image: url(img/thumb-'+key+'.png);"></div>');
+});
 
 if( !init() )	animate();
 
@@ -187,7 +205,7 @@ function init(){
   var loader = new THREE.ColladaLoader();
 	
 	// load plane model
-	loader.load('models/airbus-a350-800-man-repos.dae', function (result) {
+	loader.load('models/airbus-a350-900-repos.dae', function (result) {
 		//readyCallback
 		$("#progress").removeAttr("value");
 		plane = result.scene;
@@ -198,18 +216,6 @@ function init(){
 		$("#progress").attr("value",result.loaded);
 		$("#progress").attr("max",result.total);
 	});
-
-	// load plane model
-	loader.load('models/airbus-a350-800-man-repos.dae', function (result) {
-		//readyCallback
-		$("#progress").removeAttr("value");
-		plane = result.scene;
-		scene.add(plane);
-		$("#progress").remove();
-	}, function (result) {
-		//progressCallback
-	});
-
 	
 	// load 3d text annotations
 	loader.load('models/text-rastered.dae', function (result) {
@@ -237,7 +243,7 @@ function init(){
 	
 	// from three.js/examples/webgl_interactive_cubes.html
 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-	document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+	$("#container").on("mousedown", onDocumentMouseDown);
 	window.addEventListener( 'resize', onWindowResize, false );
 
 }
@@ -268,7 +274,7 @@ function animate() {
 function render() {
 
 	// rotate the camera around the centerpoint, on the ground plane
-	if(!mouseDown) {
+	if(wander) {
 		theta += 0.3;
 		camera.position.x = radius * Math.cos( THREE.Math.degToRad( theta ) );
 		camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
@@ -282,12 +288,22 @@ function render() {
 	renderer.render( scene, camera );
 }
 
-$("#view-block .tab").on("click", function(e) {
+$("#explore-block .tab").on("click", function(e) {
   var key = $(this).attr("id");
-	new TWEEN.Tween( camera.position ).to( views[key].camera, 200 )
-					.easing( TWEEN.Easing.Quadratic.Out).start();
-	$("#view-notes").html(views[key].notes);
-	annotationsVisibility(true);  
+	if($(this).hasClass("active")) {
+	  wander = true;
+	  $(this).removeClass("active");
+    $("#explore-notes").hide();
+	} else {
+	  $(".tab").removeClass("active");
+	  $(this).addClass("active");
+	  wander = false;
+    new TWEEN.Tween( camera.position ).to( views[key].camera, 200 )
+            .easing( TWEEN.Easing.Quadratic.Out).start();
+    $("#explore-notes").show();
+    $("#explore-notes").html(views[key].notes);
+    annotationsVisibility(true);  
+	}
 });
 
 $("#wireframe").on("click", function(e) {
@@ -339,7 +355,8 @@ function onDocumentMouseMove( event ) {
 }
 
 function onDocumentMouseDown( event ) {
-	mouseDown = true;
+	console.log("triggered");
+	wander = false;
 }
 
 // for skybox

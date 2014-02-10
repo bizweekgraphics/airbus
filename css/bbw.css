@@ -14,6 +14,10 @@ a {
 	text-decoration: none;
 }
 
+a:hover {
+	text-decoration: underline;
+}
+
 /* HEADER LOGO */
 /* this is largely ported from the main businessweek.com css */
 
@@ -144,7 +148,7 @@ body {
 
 	color		: #222;
 	background-color: #87CEEB;
-	font-family	: arial;
+  font-family:'BWHaasRegular';
 	font-size	: 100%;
 }
 #info .top {
@@ -184,27 +188,34 @@ h3 {
 	padding:10px;
 }
 
-.sidebar-block {
+/*
+#sidebar {
+  -webkit-transform: translate(250px,0);
+  transition: -webkit-transform 1s;
+}
+#sidebar:hover {
+  -webkit-transform: translate(0,0);
+}
+*/
+
+.sidebar-block, .annotation {
 	border: 3px solid black; 
 	background: magenta;
 	margin: 0 0 20px 0;
-	min-height: 93px;
+	padding: 10px;
 }
 
-#view-tabs, #data-tabs {
-  margin: 5px 5px;
-}
-
-#view-notes, #data-notes {
-  padding: 10px;
-  font-size: 11pt;
+#explore-tabs {
+  margin: 0 -10px;
+  height: 50px;
 }
 
 .tab {
-	width:56px;
-	height:56px;
+	width:calc(100%/7);
+	height:50px;
 	float:left;
-	background-size: contain;
+	/*background-size: contain;*/
+	background-size: cover;
 	background-repeat:no-repeat;
 	background-position:center;
 	box-sizing: border-box;
@@ -215,10 +226,8 @@ h3 {
   background-color: #0ff;
 }
 
-#notes {
-	padding: 10px;
-	width: 300px;
-	box-sizing: border-box;
+.tab.active {
+  background-color: black;
 }
 
 #progress {
@@ -227,4 +236,16 @@ h3 {
   left:40%;
   top:50%;
   width:20%;
+}
+
+#article-block:hover {
+  background-color: #0ff;
+  cursor: pointer;
+}
+
+.annotation {
+  position: absolute;
+  left: 200px;
+  top: 150px;
+  width: 300px;
 }
