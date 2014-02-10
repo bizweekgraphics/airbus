@@ -11,6 +11,8 @@ var plane, skybox, text3d; //will be loaded from .dae (collada) files
 var camera, scene, projector, raycaster, renderer;
 
 var wander = true;
+var wanderTimeout;
+
 var mouse = new THREE.Vector2(), INTERSECTED;
 var radius = 7, theta = 0; // for onload camera wander
 var animating, t = 0; // for animating plane along path
@@ -20,43 +22,43 @@ var views = {
 	"nose": {
 		"name": "Escape hatch",
 		"notes": "During potentially hazardous test flights, crew wear parachutes and are prepared to bail out through an explosive hatch.",
-		"notes-position": {left:200,top:150},
+		"css": {left:200,top:150},
 		"camera": {x:0,y:0,z:7}
 		},
 	"side": {
 		"name": "Fuselage",
 		"notes": "Bare of seats and internal fittings, the first flight-test airplane carries dozens of Jacuzzi-sized water jugs to bulk it up to operating weight.",
-		"notes-position": {left:200,top:150},
+		"css": {left:200,top:150},
 		"camera": {x:-7.5,y:0,z:0}
 		},
 	"tail": {
 		"name": "Tail",
 		"notes": "During the VMU (for “Velocity Minimum Unstick”) test, the pilot raises the nose so sharply during the takeoff roll that the tail hits the ground.",
-		"notes-position": {left:200,top:150},
+		"css": {left:200,top:150},
 		"camera": {x:0,y:0,z:-7}
 		},
 	"wings": {
 		"name": "Wings",
 		"notes": "Tests to determine the strength of the airplane’s structure proceed until a wing is wrenched from the fuselage.",
-		"notes-position": {left:200,top:150},
+		"css": {left:500,top:150},
 		"camera": {x:0,y:15,z:1}
 		},    	
 	"top": {
 		"name": "Surface",
 		"notes": "To earn certification from the FAA and its European counterpart, a test plane must fly into stormy weather until substantial ice accumulates on its surface.",
-		"notes-position": {left:200,top:150},
+		"css": {left:400,top:150},
 		"camera": {x:0,y:15,z:1}
 		},    	
 	"engineL": {
 		"name": "Left engine",
 		"notes": "The A350 is designed to fly safely up to seven hours on just one engine.",
-		"notes-position": {left:200,top:150},
+		"css": {left:100,top:150},
 		"camera": {x:2.5,y:-.5,z:2.5}
 		},
 	"engineR": {
 		"name": "Right engine",
 		"notes": "During ground tests, a plane is driven through giant puddles of water to see if the engines flame out.",
-		"notes-position": {left:200,top:150},
+		"css": {left:300,top:150},
 		"camera": {x:-2.5,y:-.5,z:2.5}
 		}
 	};
@@ -291,28 +293,11 @@ $("#explore-block .tab").on("click", function(e) {
 	  wander = false;
     new TWEEN.Tween( camera.position ).to( views[key].camera, 200 )
             .easing( TWEEN.Easing.Quadratic.Out).start();
+    $("#explore-notes").css(views[key].css);
     $("#explore-notes").show();
     $("#explore-notes").html(views[key].notes);
     annotationsVisibility(true);  
 	}
-});
-
-$("#wireframe").on("click", function(e) {
-  plane.traverse(function ( child ) {
-    //irreversible
-    child.material = new THREE.MeshBasicMaterial( { wireframe: true } );
-    
-    /*
-    if(typeof child.material !== "undefined" && typeof child.material.wireframe !== "undefined") {
-      //doesn't set fuselage & lots of other stuff to wireframe
-      //child.material.wireframe = true;      
-    }
-    */
-  } );
-});
-
-$("#nobg").on("click", function(e) {
-  scene.remove(skybox);
 });
 
 function annotationsVisibility(boolmeonce) {
@@ -346,8 +331,8 @@ function onDocumentMouseMove( event ) {
 }
 
 function onDocumentMouseDown( event ) {
-	console.log("triggered");
 	wander = false;
+	wanderTimeout = setTimeout(function() { wander = true; }, 2000);
 }
 
 // for skybox
@@ -385,3 +370,22 @@ function animatePlaneDemo() {
   plane.rotation.set(-10*c*Math.cos(c*t),0,0);
   t += 0.25;
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// JUST FOR USSSSS  //////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////// (on hold, inert) ///////////////
+
+$("#wireframe").on("click", function(e) {
+  plane.traverse(function ( child ) {
+    //irreversible
+    child.material = new THREE.MeshBasicMaterial( { wireframe: true } );    
+    /* if(typeof child.material !== "undefined" && typeof child.material.wireframe !== "undefined") {
+      //doesn't set fuselage & lots of other stuff to wireframe
+      child.material.wireframe = true;      
+    } */
+  } );
+});
+
+$("#nobg").on("click", function(e) {
+  scene.remove(skybox);
+});
