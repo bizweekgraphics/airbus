@@ -12,6 +12,7 @@ var camera, scene, projector, raycaster, renderer;
 
 var wander = true;
 var wanderTimeout;
+var wanderTimeoutLength = 1000*60*5;
 
 var mouse = new THREE.Vector2(), INTERSECTED;
 var radius = 7, theta = 0; // for onload camera wander
@@ -40,8 +41,9 @@ var views = {
 	"wings": {
 		"name": "Wings",
 		"notes": "Tests to determine the strength of the airplane’s structure proceed until a wing is wrenched from the fuselage.",
-		"css": {left:500,top:150},
-		"camera": {x:0,y:15,z:1}
+		"css": {left:"40%",top:"20%"},
+		"camera": {x:0,y:15,z:1},
+		"other": "http://www.youtube.com/watch?v=B74_w3Ar9nI"
 		},    	
 	"top": {
 		"name": "Surface",
@@ -103,11 +105,12 @@ function init(){
 			clearAlpha: 1
 		});
 	// uncomment if webgl is required
-	//}else{
-	//	Detector.addGetWebGLMessage();
-	//	return true;
 	}else{
-		renderer	= new THREE.CanvasRenderer();
+		//Detector.addGetWebGLMessage();
+		$("#no-webgl").show();
+		$("#sidebar").hide();
+		$("#progress").hide();
+		return true;
 	}
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.getElementById('container').appendChild(renderer.domElement);
@@ -332,7 +335,7 @@ function onDocumentMouseMove( event ) {
 
 function onDocumentMouseDown( event ) {
 	wander = false;
-	wanderTimeout = setTimeout(function() { wander = true; }, 2000);
+	wanderTimeout = setTimeout(function() { wander = true; }, wanderTimeoutLength);
 }
 
 // for skybox

@@ -1,13 +1,12 @@
 body {
-	background: #ffffff;
-	color: #444444;
-	font-family: sans-serif;
+	overflow	: hidden;
+	padding		: 0;
+	margin		: 0;
+	background-color: #87CEEB;
+	color		: #222;
+  font-family:'BWHaasRegular', Helvetica, sans-serif;
+	font-size	: 100%;
 	line-height: 1.231;
-	font-family: Helvetica, sans-serif;
-}
-
-body.dark_layout {
-	background: #1a1a1a;
 }
 
 a {
@@ -141,41 +140,10 @@ h2 a {
 
 /* THREE.JS */
 
-body {
-	overflow	: hidden;
-	padding		: 0;
-	margin		: 0;
-
-	color		: #222;
-	background-color: #87CEEB;
-  font-family:'BWHaasRegular';
-	font-size	: 100%;
-}
-#info .top {
-	position	: absolute;
-	top		: 0px;
-	width		: 100%;
-	padding		: 5px;
-	text-align	: center;
-}
-#info a {
-	color		: #66F;
-	text-decoration	: none;
-}
-#info a:hover {
-	text-decoration	: underline;
-}
-#info .bottom {
-	position	: absolute;
-	bottom		: 0px;
-	right		: 5px;
-	padding		: 5px;
-}
-
 /* SIDEBAR */
 
 h3 { 
-  font-family:BWHaasHead; 
+  font-family:BWHaasHead, Helvetica, sans-serif; 
   text-align: center;
   margin: 5px 0;
 }
@@ -198,7 +166,7 @@ h3 {
 }
 */
 
-.sidebar-block, .annotation {
+.sidebar-block {
 	border: 3px solid black; 
 	background: magenta;
 	margin: 0 0 20px 0;
@@ -244,9 +212,31 @@ h3 {
 }
 
 .annotation {
+  background-color: rgba(255,255,255,0.5);
+	margin: 0 0 20px 0;
+	padding: 10px;
   position: absolute;
   left: 200px;
   top: 150px;
   width: 300px;
   display: none;
+}
+
+/* SAFARIIIII */
+#no-webgl {
+  display:none;
+  width: 100%;
+  height: 100%;
+  padding: 100px 50px;
+  text-align: center;
+  background: white;
+  box-sizing: border-box;
+}
+#no-webgl table {
+  margin: 0 auto;
+}
+#no-webgl table td {
+  vertical-align: top;
+  padding: 10px;
+  font-size: 20pt;
 }
