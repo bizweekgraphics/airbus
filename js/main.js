@@ -10,16 +10,18 @@ var plane, skybox, text3d; //will be loaded from .dae (collada) files
 
 var camera, scene, projector, raycaster, renderer;
 
+var mouse = new THREE.Vector2(), INTERSECTED;
+
+// for camera wander
+var initCam = {"x": -4, "y": 2, "z": 8};
+var dimensions = ["x","y","z"], orbitPlane = ["x","y"], orbitFixed = ["z"];
+var radius = 7, theta = 0, dtheta = 0.3;
+
 var wander = true;
 var wanderTimeout;
 var wanderTimeoutLength = 1000*60*5;
 
-var mouse = new THREE.Vector2(), INTERSECTED;
-
-var initCam = {"x": -4, "y": 2, "z": 8};
-var dimensions = ["x","y","z"], orbitPlane = ["x","y"], orbitFixed = ["z"];
-var radius = 7, theta = 0; // for onload camera wander
-
+// vestigial :-/ unless i resurrect it for gentle wobble!
 var animating, t = 0; // for animating plane along path
 
 var annotationLines = new Object();
@@ -304,7 +306,7 @@ function animate() {
 function render() {
 
 	// rotate the camera around the centerpoint, on the ground plane
-	if(wander) { orbitZ(); }
+	if(wander) { orbitRand(); }
 	
 	TWEEN.update();
 	camera.lookAt( scene.position );
@@ -320,20 +322,25 @@ function shuffleOrbit() {
   console.log(orbitPlane);
   console.log(orbitFixed);
   radius = Math.random()*5+5;
-  camera.position.z = Math.random()*40-20;
+  camera.position[orbitFixed[0]] = Math.random()*40-20;
 }
 
 function orbitZ() {
-  theta += 0.3;
+  theta += dtheta;
   camera.position.x = radius * Math.cos( THREE.Math.degToRad( theta ) );
   camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
   camera.lookAt( scene.position );
 }
 
 function orbitRand() {
-  theta += 0.3;
-  camera.position.x = radius * Math.cos( THREE.Math.degToRad( theta ) );
-  camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
+  theta += dtheta;
+  orbitPlane.forEach(function(d,i) {
+    if(i) {
+      camera.position[d] = radius * Math.cos( THREE.Math.degToRad( theta ) );
+    } else { 
+      camera.position[d] = radius * Math.sin( THREE.Math.degToRad( theta ) );  
+    }
+  });
   camera.lookAt( scene.position );
 }
 
