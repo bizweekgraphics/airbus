@@ -23,44 +23,44 @@ var views = {
 	"nose": {
 		"name": "Escape hatch",
 		"notes": "During potentially hazardous test flights, crew wear parachutes and are prepared to bail out through an explosive hatch.",
-		"css": {left:200,top:150},
+		"css": {left:"30%",top:"30%"},
 		"camera": {x:0,y:0,z:7}
 		},
 	"side": {
 		"name": "Fuselage",
 		"notes": "Bare of seats and internal fittings, the first flight-test airplane carries dozens of Jacuzzi-sized water jugs to bulk it up to operating weight.",
-		"css": {left:200,top:150},
+		"css": {left:"60%",top:"30%"},
 		"camera": {x:-7.5,y:0,z:0}
 		},
 	"tail": {
 		"name": "Tail",
 		"notes": "During the VMU (for “Velocity Minimum Unstick”) test, the pilot raises the nose so sharply during the takeoff roll that the tail hits the ground.",
-		"css": {left:200,top:150},
+		"css": {left:"40%",top:"70%"},
 		"camera": {x:0,y:0,z:-7}
 		},
 	"wings": {
 		"name": "Wings",
 		"notes": "Tests to determine the strength of the airplane’s structure proceed until a wing is wrenched from the fuselage.",
-		"css": {left:"40%",top:"20%"},
-		"camera": {x:0,y:15,z:1},
+		"css": {left:"20%",top:"70%"},
+		"camera": {x: -8.22, y: -6.60, z: -10.71},
 		"other": "http://www.youtube.com/watch?v=B74_w3Ar9nI"
 		},    	
 	"top": {
 		"name": "Surface",
 		"notes": "To earn certification from the FAA and its European counterpart, a test plane must fly into stormy weather until substantial ice accumulates on its surface.",
-		"css": {left:400,top:150},
+		"css": {left:"35%",top:"20%"},
 		"camera": {x:0,y:15,z:1}
 		},    	
 	"engineL": {
 		"name": "Left engine",
 		"notes": "The A350 is designed to fly safely up to seven hours on just one engine.",
-		"css": {left:100,top:150},
+		"css": {left:"60%",top:"20%"},
 		"camera": {x:2.5,y:-.5,z:2.5}
 		},
 	"engineR": {
 		"name": "Right engine",
 		"notes": "During ground tests, a plane is driven through giant puddles of water to see if the engines flame out.",
-		"css": {left:300,top:150},
+		"css": {left:"30%",top:"26%"},
 		"camera": {x:-2.5,y:-.5,z:2.5}
 		}
 	};
