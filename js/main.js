@@ -137,7 +137,9 @@ function init(){
 	// cf. view-source:http://threejs.org/examples/misc_controls_orbit.html
 	controls = new THREE.OrbitControls( camera );
 	controls.addEventListener( 'change', render );
-
+  controls.minDistance = 2;
+  controls.maxDistance = 100;
+  
 	// transparently support window resize
 	THREEx.WindowResize.bind(renderer, camera);
 
