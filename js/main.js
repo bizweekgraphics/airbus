@@ -15,55 +15,91 @@ var wanderTimeout;
 var wanderTimeoutLength = 1000*60*5;
 
 var mouse = new THREE.Vector2(), INTERSECTED;
+
+var initCam = {"x": -4, "y": 2, "z": 8};
+var dimensions = ["x","y","z"], orbitPlane = ["x","y"], orbitFixed = ["z"];
 var radius = 7, theta = 0; // for onload camera wander
+
 var animating, t = 0; // for animating plane along path
 
 var annotationLines = new Object();
-var views = {
-	"nose": {
+var views = [
+  {
+    "name": "nose",
+		"camera": {x:0,y:0,z:7}
+	}, 
+	{
+		"name": "side",
+		"camera": {x:-7.5,y:0,z:0}
+	}, 
+	{
+    "name": "Tail",
+		"camera": {x:0,y:0,z:-7}
+	}, 
+	{
+		"name": "Wings",
+		"camera": {x: -8.22, y: -6.60, z: -10.71},
+	}, 
+	{
+		"name": "Surface",
+		"camera": {x:0,y:15,z:1}
+	}, 
+	{
+		"name": "Left engine",
+		"camera": {x:2.5,y:-.5,z:2.5}
+	}, 
+	{
+		"name": "Right engine",
+		"camera": {x:-2.5,y:-.5,z:2.5}
+  }
+  ];
+  
+var orbits = [
+  {
+    "name": "",
+    "radius": 0,
+    "z": 0
+  }
+  ];
+	   
+var overlays = [
+  {
 		"name": "Escape hatch",
 		"notes": "During potentially hazardous test flights, crew wear parachutes and are prepared to bail out through an explosive hatch.",
-		"css": {left:"30%",top:"30%"},
-		"camera": {x:0,y:0,z:7}
+		"css": {left:"30%",top:"30%"}
 		},
-	"side": {
+	{
 		"name": "Fuselage",
 		"notes": "Bare of seats and internal fittings, the first flight-test airplane carries dozens of Jacuzzi-sized water jugs to bulk it up to operating weight.",
-		"css": {left:"60%",top:"30%"},
-		"camera": {x:-7.5,y:0,z:0}
+		"css": {left:"60%",top:"30%"}
 		},
-	"tail": {
+	{
 		"name": "Tail",
 		"notes": "During the VMU (for “Velocity Minimum Unstick”) test, the pilot raises the nose so sharply during the takeoff roll that the tail hits the ground.",
-		"css": {left:"40%",top:"70%"},
-		"camera": {x:0,y:0,z:-7}
+		"css": {left:"40%",top:"70%"}
 		},
-	"wings": {
+	{
 		"name": "Wings",
 		"notes": "Tests to determine the strength of the airplane’s structure proceed until a wing is wrenched from the fuselage.",
 		"css": {left:"20%",top:"70%"},
-		"camera": {x: -8.22, y: -6.60, z: -10.71},
 		"other": "http://www.youtube.com/watch?v=B74_w3Ar9nI"
 		},    	
-	"top": {
+	{
 		"name": "Surface",
 		"notes": "To earn certification from the FAA and its European counterpart, a test plane must fly into stormy weather until substantial ice accumulates on its surface.",
-		"css": {left:"35%",top:"20%"},
-		"camera": {x:0,y:15,z:1}
+		"css": {left:"35%",top:"20%"}
 		},    	
-	"engineL": {
+	{
 		"name": "Left engine",
 		"notes": "The A350 is designed to fly safely up to seven hours on just one engine.",
-		"css": {left:"60%",top:"20%"},
-		"camera": {x:2.5,y:-.5,z:2.5}
+		"css": {left:"60%",top:"20%"}
 		},
-	"engineR": {
+	{
 		"name": "Right engine",
 		"notes": "During ground tests, a plane is driven through giant puddles of water to see if the engines flame out.",
-		"css": {left:"30%",top:"26%"},
-		"camera": {x:-2.5,y:-.5,z:2.5}
+		"css": {left:"30%",top:"26%"}
 		}
-	};
+	];
 var genericViews = {
 	"nose": {
 		"notes": "The cockpit's the room where pilots and navigator sit, but that's not important right now. Interior pic goes here.",
@@ -86,10 +122,6 @@ var genericViews = {
 		"camera": {x:2.5,y:-.5,z:2.5}
 		}
 	};
-
-$.each(views, function(key, view) {
-  $("#explore-tabs").append('<div class="tab" id="'+key+'" title="'+view.name+'" style="background-image: url(img/thumb-'+key+'.png);"></div>');
-});
 
 if( !init() )	animate();
 
@@ -128,7 +160,7 @@ function init(){
 	
 	// place camera in scene
 	camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
-	camera.position.set(-4,2,8);
+	camera.position.set(initCam.x,initCam.y,initCam.z);
 	//camera.up = new THREE.Vector3(0,0,1);
 	camera.lookAt(scene.position);
 	scene.add(camera);
@@ -272,12 +304,7 @@ function animate() {
 function render() {
 
 	// rotate the camera around the centerpoint, on the ground plane
-	if(wander) {
-		theta += 0.3;
-		camera.position.x = radius * Math.cos( THREE.Math.degToRad( theta ) );
-		camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
-		camera.lookAt( scene.position );
-	}
+	if(wander) { orbitZ(); }
 	
 	TWEEN.update();
 	camera.lookAt( scene.position );
@@ -286,24 +313,29 @@ function render() {
 	renderer.render( scene, camera );
 }
 
-$("#explore-block .tab").on("click", function(e) {
-  var key = $(this).attr("id");
-	if($(this).hasClass("active")) {
-	  wander = true;
-	  $(this).removeClass("active");
-    $("#explore-notes").hide();
-	} else {
-	  $(".tab").removeClass("active");
-	  $(this).addClass("active");
-	  wander = false;
-    new TWEEN.Tween( camera.position ).to( views[key].camera, 200 )
-            .easing( TWEEN.Easing.Quadratic.Out).start();
-    $("#explore-notes").css(views[key].css);
-    $("#explore-notes").show();
-    $("#explore-notes").html(views[key].notes);
-    annotationsVisibility(true);  
-	}
-});
+function shuffleOrbit() {
+  orbitPlane = dimensions.slice(0);
+  orbitFixed = orbitPlane.splice(Math.floor(Math.random()*3), 1);
+  console.log(dimensions);
+  console.log(orbitPlane);
+  console.log(orbitFixed);
+  radius = Math.random()*5+5;
+  camera.position.z = Math.random()*40-20;
+}
+
+function orbitZ() {
+  theta += 0.3;
+  camera.position.x = radius * Math.cos( THREE.Math.degToRad( theta ) );
+  camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
+  camera.lookAt( scene.position );
+}
+
+function orbitRand() {
+  theta += 0.3;
+  camera.position.x = radius * Math.cos( THREE.Math.degToRad( theta ) );
+  camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
+  camera.lookAt( scene.position );
+}
 
 function annotationsVisibility(boolmeonce) {
   text3d.children[0].visible = boolmeonce;
@@ -353,19 +385,28 @@ function loadTexture( path ) {
 	return material;
 }
 
-// Convert Excel dates into JS date objects
-// @author https://gist.github.com/christopherscott/2782634
-// @param excelDate {Number}
-// @return {Date}
-function getDateFromExcel(excelDate) {
-  // 1. Subtract number of days between Jan 1, 1900 and Jan 1, 1970, plus 1 (Google "excel leap year bug")             
-  // 2. Convert to milliseconds.
-	return new Date((excelDate - (25567 + 1))*86400*1000);
-}
-
 //////////////////////////////////////////////////////////////////////////////////////////
-// PLANE ANIMATION  //////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////// (on hold, inert) ///////////////
+// VESTIGIAL /////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+$("#explore-block .tab").on("click", function(e) {
+  var key = $(this).attr("id");
+	if($(this).hasClass("active")) {
+	  wander = true;
+	  $(this).removeClass("active");
+    $("#explore-notes").hide();
+	} else {
+	  $(".tab").removeClass("active");
+	  $(this).addClass("active");
+	  wander = false;
+    new TWEEN.Tween( camera.position ).to( views[key].camera, 200 )
+            .easing( TWEEN.Easing.Quadratic.Out).start();
+    $("#explore-notes").css(views[key].css);
+    $("#explore-notes").show();
+    $("#explore-notes").html(views[key].notes);
+    annotationsVisibility(true);  
+	}
+});
 
 //animates the plane along a sine wave
 function animatePlaneDemo() {
@@ -376,21 +417,23 @@ function animatePlaneDemo() {
   t += 0.25;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// JUST FOR USSSSS  //////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////// (on hold, inert) ///////////////
-
 $("#wireframe").on("click", function(e) {
   plane.traverse(function ( child ) {
     //irreversible
     child.material = new THREE.MeshBasicMaterial( { wireframe: true } );    
-    /* if(typeof child.material !== "undefined" && typeof child.material.wireframe !== "undefined") {
-      //doesn't set fuselage & lots of other stuff to wireframe
-      child.material.wireframe = true;      
-    } */
   } );
 });
 
 $("#nobg").on("click", function(e) {
   scene.remove(skybox);
 });
+
+// Convert Excel dates into JS date objects
+// @author https://gist.github.com/christopherscott/2782634
+// @param excelDate {Number}
+// @return {Date}
+function getDateFromExcel(excelDate) {
+  // 1. Subtract number of days between Jan 1, 1900 and Jan 1, 1970, plus 1 (Google "excel leap year bug")             
+  // 2. Convert to milliseconds.
+	return new Date((excelDate - (25567 + 1))*86400*1000);
+}

@@ -27,47 +27,27 @@
           </h2>
         </div>
 		    
-		    
+		    <!-- hidden by default, shows if webgl fails to initialize -->
 		    <div id="no-webgl">
-		    <div class="clearfix"></div>
-		    <h1>This interactive requires WebGL.</h1>
-		    <p>WebGL is supported by the most recent versions of all major browsers. If you are using Safari, you may have to manually enable WebGL and refresh this page:</p>
-		    <table>
-		    <tr><td>1</td><td>2</td><td>3</td></tr>
-		    <tr>
-		    <td><img src="img/safari1.png" width="184"></td>
-		    <td><img src="img/safari2.png" width="500"></td>
-		    <td><img src="img/safari3.png" width="288"></td>
-		    </tr>
-		    </table>
-		    <p>If that doesn't help, try viewing this page in another browser, or <a href="http://browsehappy.com/">upgrade your browser</a> if possible. If not, please accept our apologies. And <a href="#">read the article</a>.</p>
+          <div class="clearfix"></div>
+          <h1>This interactive requires WebGL.</h1>
+          <p>WebGL is supported by the most recent versions of all major browsers. If you are using Safari, you may have to manually enable WebGL and refresh this page:</p>
+          <table>
+            <tr><td>1</td><td>2</td><td>3</td></tr>
+            <tr>
+            <td><img src="img/safari1.png" width="184"></td>
+            <td><img src="img/safari2.png" width="500"></td>
+            <td><img src="img/safari3.png" width="288"></td>
+            </tr>
+          </table>
+          <p>If that doesn't help, try viewing this page in another browser, or <a href="http://browsehappy.com/">upgrade your browser</a> if possible. If not, please accept our apologies. And <a href="#">read the article</a>.</p>
 		    </div>
 		    
         <div id="sidebar">
           <div id="article-block" class="sidebar-block">
             <h3>Debugging a jet ▶</h3>
-            <div>Dek dek dek lorem ipsum whatever. Lead hook blah blah read me. By Jeff Wise</div>
+            <div>Dek dek dek lorem ipsum whatever. Lead hook blah blah read me. By Jeff Wise <button onclick="shuffleOrbit();">Shuffle</button></div>
           </div>
-          <div id="explore-block" class="sidebar-block">
-            <h3>Explore</h3>
-            <div id="explore-tabs"></div>
-          </div>
-          <div id="data-block" class="sidebar-block">
-            <h3>Data <span class="expand">▼</span></h3>
-            <div id="data-tabs">
-              <!--<div class="tab" id="stock" style="background-image: url(img/thumb-side.png);"></div>-->
-            </div>
-            <div id="data-notes"></div>
-          </div>
-      
-          <!--
-          <div id="test-block" class="sidebar-block">
-            <h3>Test tools</h3>
-            <div id="wireframe"><button>Wireframe</button></div>
-            <div id="nobg"><button>No background</button></div>
-          </div>
-          -->
-      
         </div>
     
         <div id="explore-notes" class="annotation"></div>
