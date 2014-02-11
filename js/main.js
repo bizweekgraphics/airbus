@@ -143,9 +143,6 @@ function init(){
 	// transparently support window resize
 	THREEx.WindowResize.bind(renderer, camera);
   
-  // PROJECTOR???
-  projector = new THREE.Projector();
-  
 	/* REFERENCE CUBE
 	geometry = new THREE.CubeGeometry( 1, 1, 1 );
 	material = new THREE.MeshBasicMaterial( { color: 0x0000ff, wireframe: true } );
@@ -305,38 +302,8 @@ $("#explore-block .tab").on("click", function(e) {
     $("#explore-notes").show();
     $("#explore-notes").html(views[key].notes);
     annotationsVisibility(true);  
-    drawAnnotationLine(views[key]);
 	}
 });
-
-function drawAnnotationLine(view) {
-  //http://stackoverflow.com/questions/11036106/three-js-projector-and-ray-objects
-  //https://gist.github.com/jsermeno/1008612
-  //http://threejs.org/docs/#Reference/Core/Projector
-  /*var boundRect = $("#explore-notes")[0].getBoundingClientRect();
-  var note3D = new THREE.Vector3(boundRect.left, boundRect.top, 0.5);
-  projector.unprojectVector(note3D, camera);*/
-  
-  // http://stackoverflow.com/questions/13055214/mouse-canvas-x-y-to-three-js-world-x-y-z
-  var vector = new THREE.Vector3(
-    ( event.clientX / window.innerWidth ) * 2 - 1,
-    - ( event.clientY / window.innerHeight ) * 2 + 1,
-    0.5 );
-  projector.unprojectVector( vector, camera );
-  var dir = vector.sub( camera.position ).normalize();
-  var distance = - camera.position.z / dir.z;
-  var pos = camera.position.clone().add( dir.multiplyScalar( distance ) );
-  
-  //http://stackoverflow.com/questions/11638883/thickness-of-lines-using-three-linebasicmaterial
-  edgeGeometry = new THREE.Geometry();
-  edgeGeometry.vertices[0] = new THREE.Vector3(0, 0, 0);
-  edgeGeometry.vertices[1] = vector;
-  edgesMat = new THREE.LineBasicMaterial({
-    color: 0x6699FF, linewidth: 1, fog:true});
-  edge = new THREE.Line(edgeGeometry, edgesMat);
-  edge.type = THREE.Lines;
-  scene.add(edge);
-}
 
 function annotationsVisibility(boolmeonce) {
   text3d.children[0].visible = boolmeonce;
