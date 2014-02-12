@@ -15,6 +15,7 @@
 		
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/h5bp.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/bbw.css">
     <script src="js/modernizr-2.6.2.min.js"></script>
     </head>
@@ -63,11 +64,13 @@
         </div>
         
         <div id="overlay"></div>
-    
-        <progress id="progress" value="0" max="100"></progress>
-    
+        
+        <button type="button" class="btn btn-success btn-lg" id="enable">Enable 3D interactive</button>
+        <div id="load-progress" class="progress progress-striped active">
+          <div id="load-progress-bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+        </div>    
         <div id="container"></div>
-    
+        
         <script src="js/threejs/three.min.js"></script>
         <script src="js/threejs/ColladaLoader.js"></script>
         <script src="js/threejs/OrbitControls.js"></script>
@@ -80,6 +83,7 @@
         <script>window.jQuery || document.write('<script src="js/jquery-1.10.2.min.js"><\/script>')</script>
         <script src="js/d3.min.js"></script>
         <script src="js/plugins.js"></script>
+        <script src="js/bootstrap.min.js"></script>
         <script src="js/main.js"></script>
         
     </body>

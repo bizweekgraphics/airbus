@@ -55,9 +55,27 @@ var overlays = [
 	];
 // bloomberg news video! http://www.youtube.com/watch?v=bEOJajCuwKE
 
-if( !init() )	animate();
+if(inIframe()) {
+  $("body").css("background","url(img/static.png)");
+  $("body").css("background-size","cover");
+  $("#logo, #sidebar, #load-progress, #colophon").hide();
+  $("#popout, #enable").show();
+} else {
+  if( !init() )	animate();
+}
 
-// init the scene
+$("#enable").click(function() {
+  $("#load-progress").show();
+  $("#enable").hide();
+  if( !init() )	animate();
+});
+
+console.log("Recommended listening: \n http://youtu.be/AjzcdvF3gDc?t=3m48s \n http://youtu.be/mGF_0AcHaGs \n http://youtu.be/kn6-c223DUU \n http://youtu.be/eF-4Cr9Iy_8");
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// INITIALIZE THE SCENE //////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
 function init(){
 
 	if( Detector.webgl ){
@@ -73,7 +91,7 @@ function init(){
 		//Detector.addGetWebGLMessage();
 		$("#no-webgl").show();
 		$("#sidebar").hide();
-		$("#progress").hide();
+		$("#load-progress").hide();
 		return true;
 	}
 	renderer.setSize( window.innerWidth, window.innerHeight );
@@ -172,18 +190,15 @@ function init(){
 	loader.load('models/airbus-a350-900-repos.dae', function (result) {
 		
 		// once plane has loaded
-		$("#progress").removeAttr("value");
 		plane = result.scene;
 		scene.add(plane);
-		$("#progress").remove();
+		$("#load-progress").remove();
 		
     // 2D OVERLAY
     overlayInterval = setInterval(updateOverlay,overlayIntervalLength);
 
 	}, function (result) {
 		// as plane loads
-		$("#progress").attr("value",result.loaded);
-		$("#progress").attr("max",result.total);
 	});
 	
 	// load 3d text annotations
@@ -216,6 +231,10 @@ function init(){
 	window.addEventListener( 'resize', onWindowResize, false );
 
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// CORE RENDER LOOP //////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 
 // animation loop
 function animate() {
@@ -251,6 +270,10 @@ function render() {
 	// actually render the scene
 	renderer.render( scene, camera );
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// SCENE CONTROL /////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 
 function shuffleOrbit() {
   orbitPlane = dimensions.slice(0);
@@ -295,23 +318,9 @@ function updateOverlay() {
   });
 }
 
-function annotationsVisibility(boolmeonce) {
-  text3d.children[0].visible = boolmeonce;
-  text3d.children[1].visible = boolmeonce;
-  text3d.children[2].visible = boolmeonce;
-  annotationLines.fuselage.visible = boolmeonce;
-  annotationLines.wingspan.visible = boolmeonce;
-}
-
-function drawLine(from, to, visible) {
-  var material = new THREE.LineBasicMaterial({ color: 0xffffff });
-  var geometry = new THREE.Geometry();
-  geometry.vertices.push(new THREE.Vector3(from[0], from[1], from[2]));
-  geometry.vertices.push(new THREE.Vector3(to[0], to[1], to[2]));
-  var newLine = new THREE.Line(geometry, material);
-  newLine.visible = visible;
-  return newLine;
-}
+//////////////////////////////////////////////////////////////////////////////////////////
+// EVENTS ////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
 
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
@@ -330,6 +339,28 @@ function onDocumentMouseDown( event ) {
 	wanderTimeout = setTimeout(function() { wander = true; }, wanderTimeoutLength);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////
+// HELPERS ///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+function annotationsVisibility(boolmeonce) {
+  text3d.children[0].visible = boolmeonce;
+  text3d.children[1].visible = boolmeonce;
+  text3d.children[2].visible = boolmeonce;
+  annotationLines.fuselage.visible = boolmeonce;
+  annotationLines.wingspan.visible = boolmeonce;
+}
+
+function drawLine(from, to, visible) {
+  var material = new THREE.LineBasicMaterial({ color: 0xffffff });
+  var geometry = new THREE.Geometry();
+  geometry.vertices.push(new THREE.Vector3(from[0], from[1], from[2]));
+  geometry.vertices.push(new THREE.Vector3(to[0], to[1], to[2]));
+  var newLine = new THREE.Line(geometry, material);
+  newLine.visible = visible;
+  return newLine;
+}
+
 // for skybox
 function loadTexture( path ) {
 	var texture = new THREE.Texture( texture_placeholder );
@@ -343,9 +374,18 @@ function loadTexture( path ) {
 	return material;
 }
 
+// from http://stackoverflow.com/a/326076/120290
+function inIframe() {
+  try {
+    return window.self !== window.top;
+  } catch(err) {
+    return true;
+  }
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // VESTIGIAL /////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////// (currently unused) /////////
 
 $("#explore-block .tab").on("click", function(e) {
   var key = $(this).attr("id");

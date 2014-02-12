@@ -197,12 +197,22 @@ h3 {
   background-color: black;
 }
 
-#progress {
+#load-progress {
   position:absolute;
   display:block;
   left:40%;
   top:50%;
   width:20%;
+}
+
+#enable {
+  display: none;
+  position:absolute;
+  width: 220px;
+  left:50%;
+  top:50%;
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
 
 #article-block:hover {
