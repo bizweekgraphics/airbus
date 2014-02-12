@@ -90,8 +90,7 @@ function init(){
 	}else{
 		//Detector.addGetWebGLMessage();
 		$("#no-webgl").show();
-		$("#sidebar").hide();
-		$("#load-progress").hide();
+		$("#sidebar, #load-progress, #colophon").hide();
 		return true;
 	}
 	renderer.setSize( window.innerWidth, window.innerHeight );
