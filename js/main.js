@@ -14,7 +14,7 @@ z+: roll right
 
 var stats, scene, renderer;
 var camera, controls, lastCameraPosition;
-var plane, skybox, text3d; //will be loaded from .dae (collada) files
+var plane, skybox;
 
 var camera, scene, projector, raycaster, renderer;
 
@@ -33,8 +33,6 @@ var wanderTimeoutLength = 1000*30;
 var amp=0.1,
     animating = false,
     t = 0;
-
-var annotationLines = new Object();
 
 var overlayIndex = 0,
     overlayInterval,
@@ -101,7 +99,6 @@ function init(){
 			clearColor: 0xff0000,
 			clearAlpha: 1
 		});
-	// uncomment if webgl is required
 	}else{
 		//Detector.addGetWebGLMessage();
 		$("#no-webgl").show();
@@ -126,7 +123,6 @@ function init(){
 	// place camera in scene
 	camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
 	camera.position.set(initCam.x,initCam.y,initCam.z);
-	//camera.up = new THREE.Vector3(0,0,1);
 	camera.lookAt(scene.position);
 	scene.add(camera);
 
@@ -140,12 +136,6 @@ function init(){
 	// transparently support window resize
 	THREEx.WindowResize.bind(renderer, camera);
   
-	/* REFERENCE CUBE
-	geometry = new THREE.CubeGeometry( 1, 1, 1 );
-	material = new THREE.MeshBasicMaterial( { color: 0x0000ff, wireframe: true } );
-	mesh = new THREE.Mesh( geometry, material );
-	scene.add( mesh ); */
-	
 	/// SKYBOX ///
 	
 	texture_placeholder = document.createElement( 'canvas' );
@@ -190,17 +180,8 @@ function init(){
 	light3.intensity = .5;
 	scene.add(light3);
 		
-	// 3D ANNOTATIONS
-	annotationLines.fuselage = drawLine([0,-1,3.8],[0,-1,-4],false);
-  scene.add(annotationLines.fuselage);
-  
-	annotationLines.wingspan = drawLine([3.9,-1,-.5],[-3.9,-1,-.5],false);
-	scene.add(annotationLines.wingspan);
-	
-	// LOAD STUFF
+	// LOAD PLANE
   var loader = new THREE.ColladaLoader();
-	
-	// load plane model
 	loader.load('models/airbus-a350-900-repos.dae', function (result) {
 		
 		// once plane has loaded
@@ -214,30 +195,7 @@ function init(){
 
 	}, function (result) {
 		// as plane loads
-	});
-	
-	// load 3d text annotations
-	loader.load('models/text-rastered.dae', function (result) {
-		//readyCallback
-		text3d = result.scene;
-		text3d.scale.set(0.3, 0.3, 0.3);
-		
-		//wingspan
-		text3d.children[0].position.set(-6,-4,-2); 
-		
-    //length
-		text3d.children[1].rotation.set(-Math.PI/2,0,0); 
-		text3d.children[1].position.set(2,4,-4);
-		
-		//width
-		text3d.children[2].rotation.set(0,-Math.PI/2,0); 
-		text3d.children[2].position.set(0,-4,0);
-				
-		annotationsVisibility(false);
-		
-		scene.add(text3d);
-	}, function (result) {
-		//progressCallback
+		// (currently just one of those infinite progress bars, because this doesn't work well enough)
 	});
 	
 	// from three.js/examples/webgl_interactive_cubes.html
@@ -299,13 +257,6 @@ function shuffleOrbit() {
   wander = true;
 }
 
-function orbitZ() {
-  theta += dtheta;
-  camera.position.x = radius * Math.cos( THREE.Math.degToRad( theta ) );
-  camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
-  camera.lookAt( scene.position );
-}
-
 function orbitRand() {
   theta += dtheta;
   orbitPlane.forEach(function(d,i) {
@@ -319,7 +270,6 @@ function orbitRand() {
 }
 
 function updateOverlay() {
-  //var i = Math.floor(Math.random()*overlays.length);
   var css = {"left": (Math.floor(Math.random()*60)+20)+"%", "top": (Math.floor(Math.random()*60)+20)+"%"};
   var html = overlays[overlayIndex].notes;
   if(overlays[overlayIndex].img) {
@@ -408,24 +358,6 @@ function onDocumentMouseDown( event ) {
 // HELPERS ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
-function annotationsVisibility(boolmeonce) {
-  text3d.children[0].visible = boolmeonce;
-  text3d.children[1].visible = boolmeonce;
-  text3d.children[2].visible = boolmeonce;
-  annotationLines.fuselage.visible = boolmeonce;
-  annotationLines.wingspan.visible = boolmeonce;
-}
-
-function drawLine(from, to, visible) {
-  var material = new THREE.LineBasicMaterial({ color: 0xffffff });
-  var geometry = new THREE.Geometry();
-  geometry.vertices.push(new THREE.Vector3(from[0], from[1], from[2]));
-  geometry.vertices.push(new THREE.Vector3(to[0], to[1], to[2]));
-  var newLine = new THREE.Line(geometry, material);
-  newLine.visible = visible;
-  return newLine;
-}
-
 // for skybox
 function loadTexture( path ) {
 	var texture = new THREE.Texture( texture_placeholder );
@@ -446,57 +378,4 @@ function inIframe() {
   } catch(err) {
     return true;
   }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// VESTIGIAL /////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////// (currently unused) /////////
-
-$("#explore-block .tab").on("click", function(e) {
-  var key = $(this).attr("id");
-	if($(this).hasClass("active")) {
-	  wander = true;
-	  $(this).removeClass("active");
-    $("#explore-notes").hide();
-	} else {
-	  $(".tab").removeClass("active");
-	  $(this).addClass("active");
-	  wander = false;
-    new TWEEN.Tween( camera.position ).to( views[key].camera, 200 )
-            .easing( TWEEN.Easing.Quadratic.Out).start();
-    $("#explore-notes").css(views[key].css);
-    $("#explore-notes").show();
-    $("#explore-notes").html(views[key].notes);
-    annotationsVisibility(true);  
-	}
-});
-
-//animates the plane along a sine wave
-function animatePlaneDemo() {
-  var c=0.1; //scale factor
-  plane.position.set(0,10*Math.sin(c*t),t);
-  //plane.rotation.set(-Math.PI/4,0,0); //tilts plane nose-up by 45deg
-  plane.rotation.set(-10*c*Math.cos(c*t),0,0);
-  t += 0.25;
-}
-
-$("#wireframe").on("click", function(e) {
-  plane.traverse(function ( child ) {
-    //irreversible
-    child.material = new THREE.MeshBasicMaterial( { wireframe: true } );    
-  } );
-});
-
-$("#nobg").on("click", function(e) {
-  scene.remove(skybox);
-});
-
-// Convert Excel dates into JS date objects
-// @author https://gist.github.com/christopherscott/2782634
-// @param excelDate {Number}
-// @return {Date}
-function getDateFromExcel(excelDate) {
-  // 1. Subtract number of days between Jan 1, 1900 and Jan 1, 1970, plus 1 (Google "excel leap year bug")             
-  // 2. Convert to milliseconds.
-	return new Date((excelDate - (25567 + 1))*86400*1000);
 }

@@ -1,15 +1,21 @@
 # humanstxt.org/
 # The humans responsible & technology colophon
 
-# TEAM
-
-    <name> -- <role> -- <twitter>
+Toph Tucker - @tophtucker
 
 # THANKS
 
-    <name>
+Text by Jeff Wise
+http://jeffwise.net/
 
-# TECHNOLOGY COLOPHON
+Skybox by Heiko Irrgang
+http://www.93i.de/products/media/skybox-texture-set-1
 
-    HTML5, CSS3
-    Normalize.css, jQuery, Modernizr
+A350 model by MoniMark on the Trimble 3D Warehouse
+http://sketchup.google.com/3dwarehouse/details?mid=9f75309b9744f1b54eefcdc602d4520
+
+# TECHNOLOGY
+
+three.js
+HTML5, CSS3, Bootstrap
+Normalize.css, jQuery, Modernizr
