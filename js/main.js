@@ -344,6 +344,39 @@ function wobble() {
 // EVENTS ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
+$("#shuffle").click(function(e) {
+  shuffleOrbit();
+  $("#orbit-toggle").addClass("active");
+  $("#orbit-toggle").find(".label").text("Orbit on");
+});
+
+$("#orbit-toggle").click(function(e) {
+  if(wander) {
+    wander = false;
+    $(this).removeClass("active");
+    $(this).find(".label").text("Orbit off");
+  } else {
+    wander = true;
+    $(this).addClass("active");
+    $(this).find(".label").text("Orbit on");
+  }
+});
+
+$("#notes-toggle").click(function(e) {
+  if($(this).hasClass("active")) {
+    clearInterval(overlayInterval);
+    $(this).removeClass("active");
+    $(this).find(".label").text("Notes off");
+    $("#overlay-container").hide();
+  } else {
+    $("#overlay-container").show();
+    updateOverlay();
+    overlayInterval = setInterval(updateOverlay,overlayIntervalLength);
+    $(this).addClass("active");
+    $(this).find(".label").text("Notes on");
+  }
+});
+
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
