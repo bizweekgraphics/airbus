@@ -68,6 +68,10 @@ h2 a {
 	color: #f0f;
 }
 
+h2 a:hover {
+	color: #f0f;
+}
+
 #channel_name {
 	position: absolute;
 	bottom: 0;
@@ -138,63 +142,33 @@ h2 a {
 	background-repeat: no-repeat;
 }
 
-/* THREE.JS */
-
-/* SIDEBAR */
+/* PAGE STUFF */
 
 h3 { 
   font-family:BWHaasHead, Helvetica, sans-serif; 
-  text-align: center;
   margin: 5px 0;
 }
 
-#sidebar {
+#hed {
   position: absolute;
   top: 15px;
   right: 15px;
   width: 270px;
+  text-align: right;
+  cursor:pointer;
 }
 
-/*
-#sidebar {
-  -webkit-transform: translate(250px,0);
-  transition: -webkit-transform 1s;
-}
-#sidebar:hover {
-  -webkit-transform: translate(0,0);
-}
-*/
-
-.sidebar-block {
-	border: 3px solid black; 
-	background: magenta;
-	margin: 0 0 20px 0;
-	padding: 10px;
+#hed:hover h3 {
+  color: magenta;
 }
 
-#explore-tabs {
-  margin: 0 -10px;
-  height: 50px;
+#hed .dek {
+  display: none;
+  margin-right: 20px;
 }
 
-.tab {
-	width:calc(100%/7);
-	height:50px;
-	float:left;
-	/*background-size: contain;*/
-	background-size: cover;
-	background-repeat:no-repeat;
-	background-position:center;
-	box-sizing: border-box;
-	cursor: pointer;
-}
-
-.tab:hover {
-  background-color: #0ff;
-}
-
-.tab.active {
-  background-color: black;
+#hed:hover .dek {
+  display: inherit;
 }
 
 #load-progress {
@@ -215,11 +189,6 @@ h3 {
   transform: translate(-50%, -50%);
 }
 
-#article-block:hover {
-  background-color: #0ff;
-  cursor: pointer;
-}
-
 #overlay {
   background-color: rgba(255,255,255,0.5);
 	margin: 0 0 20px 0;
@@ -231,6 +200,11 @@ h3 {
   display: none;
   -webkit-transform: translate(-50%,-50%);
   transform: translate(-50%, -50%);
+  border-radius: 4px;
+}
+
+#overlay img {
+  margin-top: 8px;
 }
 
 #colophon {
@@ -248,10 +222,22 @@ h3 {
   color: #ccc;
 }
 
-#colophon ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+#controls {
+  position: absolute;
+  left: 15px;
+  bottom: 15px;
+}
+
+#controls .glyphicon {
+  padding: 2px; /*shuffle icon was getting cut off*/
+}
+
+#controls button .label {
+  display: none;
+}
+
+#controls button:hover .label {
+  display: inherit;
 }
 
 /* SAFARIIIII */

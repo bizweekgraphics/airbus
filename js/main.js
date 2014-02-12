@@ -1,7 +1,15 @@
 /* COORDINATE SYSTEM:
+
+Position:
 x+: plane to its left
 y+: plane altitude up
 z+: plane forward
+
+Rotation:
+x+: pitch down
+y+: yaw counterclockwise
+z+: roll right
+
 */
 
 var stats, scene, renderer;
@@ -21,14 +29,19 @@ var wander = true;
 var wanderTimeout;
 var wanderTimeoutLength = 1000*30;
 
-// vestigial :-/ unless i resurrect it for gentle wobble!
-var animating, t = 0; // for animating plane along path
+// for gentle rolling
+var amp=0.1,
+    animating = false,
+    t = 0;
 
 var annotationLines = new Object();
 
-var overlayIndex = 0;
-var overlayInterval;
-var overlayIntervalLength = 1000*5;
+var overlayIndex = 0,
+    overlayInterval,
+    overlayIntervalLength = 1000*8,
+    overlayDelay,
+    overlayDelayLength = 1000*2,
+    overlayFadeLength = 1000;
 var overlays = [
   { "notes": "Airbus created a digital mock-up of the A350 that every engineer working on the airplane can use at any time.", 
 	  "img": "dmu.gif",
@@ -58,7 +71,7 @@ var overlays = [
 if(inIframe()) {
   $("body").css("background","url(img/static.png)");
   $("body").css("background-size","cover");
-  $("#logo, #sidebar, #load-progress, #colophon").hide();
+  $("#logo, #hed, #load-progress, #colophon").hide();
   $("#popout, #enable").show();
 } else {
   if( !init() )	animate();
@@ -90,7 +103,7 @@ function init(){
 	}else{
 		//Detector.addGetWebGLMessage();
 		$("#no-webgl").show();
-		$("#sidebar, #load-progress, #colophon").hide();
+		$("#hed, #load-progress, #colophon").hide();
 		return true;
 	}
 	renderer.setSize( window.innerWidth, window.innerHeight );
@@ -192,6 +205,7 @@ function init(){
 		plane = result.scene;
 		scene.add(plane);
 		$("#load-progress").remove();
+		animating = true;
 		
     // 2D OVERLAY
     overlayInterval = setInterval(updateOverlay,overlayIntervalLength);
@@ -309,36 +323,20 @@ function updateOverlay() {
   if(overlays[overlayIndex].img) {
     html += '<img src="img/overlays/'+overlays[overlayIndex].img+'" width="100%">';
   }
-  $("#overlay").fadeOut(300, function() { 
+  $("#overlay").fadeOut(overlayFadeLength, function() { 
     // do this when fade out finishes 
     $("#overlay").css(css);
     $("#overlay").html(html);
-    $("#overlay").fadeIn();
+    overlayDelay = setTimeout(function() { $("#overlay").fadeIn(overlayFadeLength); }, overlayDelayLength);
     overlayIndex = (overlayIndex+1) % overlays.length;
   });
 }
 
-/*
-var maxAngle = {"x": 3, "y": 3, "z": 3};
-var minAngle = {"x": -3, "y": -3, "z": -3};
-var randAngleRange = 0.1;
 function wobble() {
   // x = pitch down
   // y = yaw counterclockwise
   // z = roll right
-  dimensions.forEach(function(d) {
-    plane.rotation[d] = THREE.Math.degToRad(THREE.Math.clamp(
-      THREE.Math.radToDeg(plane.rotation[d]) + Math.random() * randAngleRange - (randAngleRange/2),
-      minAngle[d],
-      maxAngle[d]));
-  });
-}
-*/
-
-function enableWobble() { animating = true; }
-function wobble() {
-  var c=0.1;
-  plane.rotation.z = c*Math.sin(t);
+  plane.rotation.z = amp*Math.sin(t);
   t += 0.01;
 }
 
