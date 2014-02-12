@@ -71,14 +71,16 @@ var overlays = [
 if(inIframe()) {
   $("body").css("background","url(img/static.png)");
   $("body").css("background-size","cover");
+  $("body").addClass("iframed");
   $("#logo, #hed, #load-progress, #colophon").hide();
   $("#popout, #enable").show();
+  $("#controls").hide();
 } else {
   if( !init() )	animate();
 }
 
 $("#enable").click(function() {
-  $("#load-progress").show();
+  $("#load-progress, #controls, #colophon").show();
   $("#enable").hide();
   if( !init() )	animate();
 });
@@ -343,6 +345,14 @@ function wobble() {
 //////////////////////////////////////////////////////////////////////////////////////////
 // EVENTS ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
+
+$("#popout").click(function() {
+   window.open('index.html','_blank');  
+});
+
+$("#hed").click(function() {
+   window.open('iframe-container.html','_blank');  
+});
 
 $("#shuffle").click(function(e) {
   shuffleOrbit();

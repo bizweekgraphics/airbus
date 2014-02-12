@@ -9,6 +9,10 @@ body {
 	line-height: 1.231;
 }
 
+.iframed .hide-in-iframe {
+  display: none;
+}
+
 a {
 	text-decoration: none;
 }
@@ -31,10 +35,6 @@ a:hover {
 	width: 477px;
 	height: 60px;
 	margin: 15px;
-}
-
-.iframed #logo {
-	display:none;
 }
 
 #logo a {
@@ -149,7 +149,7 @@ h3 {
   margin: 5px 0;
 }
 
-#hed {
+#hed, #popout {
   position: absolute;
   top: 15px;
   right: 15px;
@@ -158,7 +158,7 @@ h3 {
   cursor:pointer;
 }
 
-#hed:hover h3 {
+#hed:hover h3, #popout:hover h3 {
   color: magenta;
 }
 
@@ -169,6 +169,10 @@ h3 {
 
 #hed:hover .dek {
   display: inherit;
+}
+
+#popout {
+  display: none;
 }
 
 #load-progress {
