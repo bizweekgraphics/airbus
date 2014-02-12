@@ -247,7 +247,8 @@ function animate() {
 	controls.update();
 	
 	if(animating) {
-    animatePlane();
+    //animatePlane();
+    wobble();
 	}
 	
 	// do the render
@@ -316,6 +317,24 @@ function updateOverlay() {
     overlayIndex = (overlayIndex+1) % overlays.length;
   });
 }
+
+var maxAngle = {"x": 3, "y": 3, "z": 3};
+var minAngle = {"x": -3, "y": -3, "z": -3};
+var randAngleRange = 0.1;
+function wobble() {
+  /*
+  x = pitch down
+  y = yaw counterclockwise
+  z = roll right
+  */
+  dimensions.forEach(function(d) {
+    plane.rotation[d] = THREE.Math.degToRad(THREE.Math.clamp(
+      THREE.Math.radToDeg(plane.rotation[d]) + Math.random() * randAngleRange - (randAngleRange/2),
+      minAngle[d],
+      maxAngle[d]));
+  });
+}
+function enableWobble() { animating = true; }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // EVENTS ////////////////////////////////////////////////////////////////////////////////
