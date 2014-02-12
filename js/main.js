@@ -318,15 +318,14 @@ function updateOverlay() {
   });
 }
 
+/*
 var maxAngle = {"x": 3, "y": 3, "z": 3};
 var minAngle = {"x": -3, "y": -3, "z": -3};
 var randAngleRange = 0.1;
 function wobble() {
-  /*
-  x = pitch down
-  y = yaw counterclockwise
-  z = roll right
-  */
+  // x = pitch down
+  // y = yaw counterclockwise
+  // z = roll right
   dimensions.forEach(function(d) {
     plane.rotation[d] = THREE.Math.degToRad(THREE.Math.clamp(
       THREE.Math.radToDeg(plane.rotation[d]) + Math.random() * randAngleRange - (randAngleRange/2),
@@ -334,7 +333,14 @@ function wobble() {
       maxAngle[d]));
   });
 }
+*/
+
 function enableWobble() { animating = true; }
+function wobble() {
+  var c=0.1;
+  plane.rotation.z = c*Math.sin(t);
+  t += 0.01;
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // EVENTS ////////////////////////////////////////////////////////////////////////////////
