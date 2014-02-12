@@ -2,7 +2,7 @@ body {
 	overflow	: hidden;
 	padding		: 0;
 	margin		: 0;
-	background-color: #87CEEB;
+	background-color: #000;
 	color		: #222;
   font-family:'BWHaasRegular', Helvetica, sans-serif;
 	font-size	: 100%;
@@ -152,7 +152,7 @@ h3 {
   position: absolute;
   top: 15px;
   right: 15px;
-  width: 300px;
+  width: 270px;
 }
 
 /*
@@ -210,7 +210,7 @@ h3 {
   cursor: pointer;
 }
 
-.annotation {
+#overlay {
   background-color: rgba(255,255,255,0.5);
 	margin: 0 0 20px 0;
 	padding: 10px;
@@ -221,6 +221,27 @@ h3 {
   display: none;
   -webkit-transform: translate(-50%,-50%);
   transform: translate(-50%, -50%);
+}
+
+#colophon {
+  position: absolute;
+  right:15px;
+  bottom:15px;
+  text-align:right;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-family: Helvetica;
+  color:white;
+}
+
+#colophon a {
+  color: #ccc;
+}
+
+#colophon ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 /* SAFARIIIII */

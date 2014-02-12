@@ -19,111 +19,41 @@ var radius = 7, theta = 0, dtheta = 0.3;
 
 var wander = true;
 var wanderTimeout;
-var wanderTimeoutLength = 1000*60*5;
+var wanderTimeoutLength = 1000*30;
 
 // vestigial :-/ unless i resurrect it for gentle wobble!
 var animating, t = 0; // for animating plane along path
 
 var annotationLines = new Object();
-var views = [
-  {
-    "name": "nose",
-		"camera": {x:0,y:0,z:7}
-	}, 
-	{
-		"name": "side",
-		"camera": {x:-7.5,y:0,z:0}
-	}, 
-	{
-    "name": "Tail",
-		"camera": {x:0,y:0,z:-7}
-	}, 
-	{
-		"name": "Wings",
-		"camera": {x: -8.22, y: -6.60, z: -10.71},
-	}, 
-	{
-		"name": "Surface",
-		"camera": {x:0,y:15,z:1}
-	}, 
-	{
-		"name": "Left engine",
-		"camera": {x:2.5,y:-.5,z:2.5}
-	}, 
-	{
-		"name": "Right engine",
-		"camera": {x:-2.5,y:-.5,z:2.5}
-  }
-  ];
-  
-var orbits = [
-  {
-    "name": "",
-    "radius": 0,
-    "z": 0
-  }
-  ];
-	   
+
+var overlayIndex = 0;
+var overlayInterval;
+var overlayIntervalLength = 1000*5;
 var overlays = [
-  {
-		"name": "Escape hatch",
-		"notes": "During potentially hazardous test flights, crew wear parachutes and are prepared to bail out through an explosive hatch.",
-		"css": {left:"30%",top:"30%"}
-		},
-	{
-		"name": "Fuselage",
-		"notes": "Bare of seats and internal fittings, the first flight-test airplane carries dozens of Jacuzzi-sized water jugs to bulk it up to operating weight.",
-		"css": {left:"60%",top:"30%"}
-		},
-	{
-		"name": "Tail",
-		"notes": "During the VMU (for “Velocity Minimum Unstick”) test, the pilot raises the nose so sharply during the takeoff roll that the tail hits the ground.",
-		"css": {left:"40%",top:"70%"}
-		},
-	{
-		"name": "Wings",
-		"notes": "Tests to determine the strength of the airplane’s structure proceed until a wing is wrenched from the fuselage.",
-		"css": {left:"20%",top:"70%"},
-		"other": "http://www.youtube.com/watch?v=B74_w3Ar9nI"
-		},    	
-	{
-		"name": "Surface",
-		"notes": "To earn certification from the FAA and its European counterpart, a test plane must fly into stormy weather until substantial ice accumulates on its surface.",
-		"css": {left:"35%",top:"20%"}
-		},    	
-	{
-		"name": "Left engine",
-		"notes": "The A350 is designed to fly safely up to seven hours on just one engine.",
-		"css": {left:"60%",top:"20%"}
-		},
-	{
-		"name": "Right engine",
-		"notes": "During ground tests, a plane is driven through giant puddles of water to see if the engines flame out.",
-		"css": {left:"30%",top:"26%"}
-		}
+  { "notes": "Airbus created a digital mock-up of the A350 that every engineer working on the airplane can use at any time.", 
+	  "img": "dmu.gif",
+	  "src": "http://videos.airbus.com/video/dc6bd25e7f3s.html" },
+  { "notes": "The A350 airframe is Airbus’s first to be built mostly (53 percent) of composite materials." },
+	{ "notes": "Tests to determine the strength of the airplane’s structure proceed until a wing is wrenched from the fuselage.", 
+	  "img": "wing-warp.gif",
+		"src": "http://www.youtube.com/watch?v=B74_w3Ar9nI" },
+	{ "notes": "Bare of seats and internal fittings, the first flight-test airplane carries dozens of Jacuzzi-sized water jugs to bulk it up to operating weight." },
+  { "notes": "During potentially hazardous test flights, crew wear parachutes and are prepared to bail out through an explosive hatch.", 
+	  "img": "" },
+	{ "notes": "During the VMU (for velocity minimum unstick) test, the pilot raises the nose so sharply during the takeoff roll that the tail hits the ground.",
+	  "src": "http://www.youtube.com/watch?v=_qKo7Pa8wgI" },
+	{ "notes": "To earn certification from the FAA and its European counterpart, a test plane must fly into stormy weather until substantial ice accumulates on its surface.",
+	  "src": "http://videos.airbus.com/video/iLyROoafIlQ2.html" },
+	{ "notes": "The A350 is designed to fly safely for up to seven hours on one engine." },
+	{ "notes": "During ground tests, planes taxi at high speed through giant puddles to see if the spray causes the engines to fail. (A380 shown here.)", 
+	  "img": "splashy.gif",
+		"src": "http://videos.airbus.com/video/iLyROoafIlby.html" },
+	{ "notes": "An A350 front fuselage in final assembly at Airbus’s huge facility in Toulouse, France.", 
+	  "img": "" },
+	{ "notes": "Curved winglets reduce the drag caused by vortices slipping off the end of the wing and increase fuel efficiency." },
+	{ "notes": "All but the first five A350 test aircraft will eventually be refitted and sold to airlines." }
 	];
-var genericViews = {
-	"nose": {
-		"notes": "The cockpit's the room where pilots and navigator sit, but that's not important right now. Interior pic goes here.",
-		"camera": {x:0,y:0,z:7}
-		},
-	"side": {
-		"notes": "The fuselage seats four people, or six children. It looks like a big Tylenol.",
-		"camera": {x:-7.5,y:0,z:0}
-		},
-	"tail": {
-		"notes": "The tail is larger than the tails of most monkeys.",
-		"camera": {x:0,y:0,z:-7}
-		},
-	"top": {
-		"notes": "With a wingspan of 213 feet, the Airbus is, like, pretty wide. TK TK TK blah blah hello.",
-		"camera": {x:0,y:15,z:1}
-		},    	
-	"engine": {
-		"notes": "The twin Rolls-Royce Trent XWB turbofans produce like a million pounds of thrust each. Roughly.",
-		"camera": {x:2.5,y:-.5,z:2.5}
-		}
-	};
+// bloomberg news video! http://www.youtube.com/watch?v=bEOJajCuwKE
 
 if( !init() )	animate();
 
@@ -153,6 +83,7 @@ function init(){
 	stats = new Stats();
 	stats.domElement.style.position	= 'absolute';
 	stats.domElement.style.bottom	= '0px';
+	stats.domElement.style.display = 'none';
 	document.body.appendChild( stats.domElement );
 
 	// create a scene
@@ -192,15 +123,17 @@ function init(){
 	var context = texture_placeholder.getContext( '2d' );
 	context.fillStyle = 'rgb( 200, 200, 200 )';
 	context.fillRect( 0, 0, texture_placeholder.width, texture_placeholder.height );
-
+  
+  var skyboxDir = "skybox-cloudy";
+  
 	var materials = [
 
-		loadTexture( 'img/skybox/px.jpg' ), // right
-		loadTexture( 'img/skybox/nx.jpg' ), // left
-		loadTexture( 'img/skybox/py.jpg' ), // top
-		loadTexture( 'img/skybox/ny.jpg' ), // bottom
-		loadTexture( 'img/skybox/pz.jpg' ), // back
-		loadTexture( 'img/skybox/nz.jpg' )  // front
+		loadTexture( 'img/'+skyboxDir+'/px.jpg' ), // right
+		loadTexture( 'img/'+skyboxDir+'/nx.jpg' ), // left
+		loadTexture( 'img/'+skyboxDir+'/py.jpg' ), // top
+		loadTexture( 'img/'+skyboxDir+'/ny.jpg' ), // bottom
+		loadTexture( 'img/'+skyboxDir+'/pz.jpg' ), // back
+		loadTexture( 'img/'+skyboxDir+'/nz.jpg' )  // front
 
 	];
 
@@ -224,9 +157,8 @@ function init(){
 	light3.position.set(10, 0, -20);
 	light3.intensity = .5;
 	scene.add(light3);
-	
-	// DRAW ANNOTATION LINES
-	
+		
+	// 3D ANNOTATIONS
 	annotationLines.fuselage = drawLine([0,-1,3.8],[0,-1,-4],false);
   scene.add(annotationLines.fuselage);
   
@@ -238,13 +170,18 @@ function init(){
 	
 	// load plane model
 	loader.load('models/airbus-a350-900-repos.dae', function (result) {
-		//readyCallback
+		
+		// once plane has loaded
 		$("#progress").removeAttr("value");
 		plane = result.scene;
 		scene.add(plane);
 		$("#progress").remove();
+		
+    // 2D OVERLAY
+    overlayInterval = setInterval(updateOverlay,overlayIntervalLength);
+
 	}, function (result) {
-		//progressCallback
+		// as plane loads
 		$("#progress").attr("value",result.loaded);
 		$("#progress").attr("max",result.total);
 	});
@@ -318,11 +255,9 @@ function render() {
 function shuffleOrbit() {
   orbitPlane = dimensions.slice(0);
   orbitFixed = orbitPlane.splice(Math.floor(Math.random()*3), 1);
-  console.log(dimensions);
-  console.log(orbitPlane);
-  console.log(orbitFixed);
   radius = Math.random()*5+5;
   camera.position[orbitFixed[0]] = Math.random()*40-20;
+  wander = true;
 }
 
 function orbitZ() {
@@ -342,6 +277,22 @@ function orbitRand() {
     }
   });
   camera.lookAt( scene.position );
+}
+
+function updateOverlay() {
+  //var i = Math.floor(Math.random()*overlays.length);
+  var css = {"left": (Math.floor(Math.random()*60)+20)+"%", "top": (Math.floor(Math.random()*60)+20)+"%"};
+  var html = overlays[overlayIndex].notes;
+  if(overlays[overlayIndex].img) {
+    html += '<img src="img/overlays/'+overlays[overlayIndex].img+'" width="100%">';
+  }
+  $("#overlay").fadeOut(300, function() { 
+    // do this when fade out finishes 
+    $("#overlay").css(css);
+    $("#overlay").html(html);
+    $("#overlay").fadeIn();
+    overlayIndex = (overlayIndex+1) % overlays.length;
+  });
 }
 
 function annotationsVisibility(boolmeonce) {
