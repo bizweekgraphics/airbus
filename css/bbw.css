@@ -262,3 +262,20 @@ h3 {
   padding: 10px;
   font-size: 20pt;
 }
+
+@media (max-width: 630px) {
+  #no-webgl {
+    padding: 60px;
+    text-align: left;
+    font-family: Helvetica;
+  }
+  #no-webgl table {
+    display: none;
+  }
+}
+
+@media (min-width: 631px) {
+  #no-webgl ol {
+    display: none;
+  }
+}

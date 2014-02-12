@@ -32,7 +32,7 @@
 		    <div id="no-webgl">
           <div class="clearfix"></div>
           <h1>This interactive requires WebGL.</h1>
-          <p>WebGL is supported by the most recent versions of all major browsers. If you are using Safari, you may have to manually enable WebGL and refresh this page:</p>
+          <p>WebGL is supported by the most recent versions of all major browsers. If you are using Safari, you may have to manually enable WebGL and <a href="#" onclick="location.reload();">refresh this page</a>:</p>
           <table>
             <tr><td>1</td><td>2</td><td>3</td></tr>
             <tr>
@@ -41,7 +41,12 @@
             <td><img src="img/safari3.png" width="288"></td>
             </tr>
           </table>
-          <p>If that doesn't help, try viewing this page in another browser, or <a href="http://browsehappy.com/" target="_blank">upgrade your browser</a> if possible. If not, please accept our apologies. And <a href="#" target="_blank">read the article</a>.</p>
+          <ol>
+            <li>Click <strong>Safari</strong> on the menu bar, then <strong>Preferences... (⌘,)</strong></li>
+            <li>Under the <strong>Advanced</strong> tab, check <strong>Show Develop in menu bar</strong></li>
+            <li>Under <strong>Develop</strong>, click <strong>Enable WebGL</strong></li>
+          </ol>
+          <p>If that doesn't help, try viewing this page in another browser, or <a href="http://browsehappy.com/" target="_blank">upgrade your browser</a> if possible. If not, please accept our apologies. <span class="hide-in-iframe">And <a href="#" target="_blank">read the article</a>.</span></p>
 		    </div>
 		    
         <div id="hed" class="hide-in-iframe">

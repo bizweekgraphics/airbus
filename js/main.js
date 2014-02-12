@@ -105,7 +105,7 @@ function init(){
 	}else{
 		//Detector.addGetWebGLMessage();
 		$("#no-webgl").show();
-		$("#hed, #load-progress, #colophon").hide();
+		$("#hed, #load-progress, #colophon, #controls").hide();
 		return true;
 	}
 	renderer.setSize( window.innerWidth, window.innerHeight );
