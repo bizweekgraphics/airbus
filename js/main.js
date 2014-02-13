@@ -148,7 +148,6 @@ function init(){
   
   var skyboxDir = "skybox-cloudy";
   var hour = new Date().getHours();
-  hour = 15;
   if(hour<6) {
     $("body").addClass("dark_layout");
     skyboxDir = "skybox-night";
