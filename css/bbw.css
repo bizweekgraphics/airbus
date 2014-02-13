@@ -230,6 +230,10 @@ h3 {
   color: #ccc;
 }
 
+#overlay a {
+  color: #333;
+}
+
 #controls {
   position: absolute;
   left: 15px;

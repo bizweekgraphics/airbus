@@ -290,6 +290,9 @@ function orbitRand() {
 function updateOverlay() {
   var css = {"left": (Math.floor(Math.random()*60)+20)+"%", "top": (Math.floor(Math.random()*60)+20)+"%"};
   var html = overlays[overlayIndex].notes;
+  if(overlays[overlayIndex].src) {
+    html += '<br/><a href="'+overlays[overlayIndex].src+'" target="_blank">Learn more <span class="glyphicon glyphicon-chevron-right"></span></a>';
+  }
   if(overlays[overlayIndex].img) {
     html += '<img src="img/overlays/'+overlays[overlayIndex].img+'" width="100%">';
   }
