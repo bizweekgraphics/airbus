@@ -46,7 +46,7 @@ a:hover {
 #logo a#home_link {
 	width: 427px;
 	height: 33px;
-	background: url(../img/site-s5d303eb3f3-448dcf1d9671789f047efdb043527a71.png) no-repeat;
+	background: url(http://wbbw1.bwbx.io/graphics/airbus-a350-3d-graphic/img/site-s5d303eb3f3-448dcf1d9671789f047efdb043527a71.png) no-repeat;
 	background-position: 0 -145px;
 }
 
@@ -65,11 +65,11 @@ h2 {
 }
 
 h2 a {
-	color: #f0f;
+	color: #88307f;
 }
 
 h2 a:hover {
-	color: #f0f;
+	color: #88307f;
 }
 
 #channel_name {
@@ -159,7 +159,7 @@ h3 {
 }
 
 #hed:hover h3, #popout:hover h3 {
-  color: magenta;
+  color: #88307f;
 }
 
 #hed .dek {
