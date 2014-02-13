@@ -48,12 +48,12 @@ var overlays = [
 	{ "notes": "Tests to determine the strength of the airplane’s structure proceed until a wing is wrenched from the fuselage.", 
 	  "img": "wing-warp.gif",
 		"src": "http://www.youtube.com/watch?v=B74_w3Ar9nI" },
-	{ "notes": "Bare of seats and internal fittings, the first flight-test airplane carries dozens of Jacuzzi-sized water jugs to bulk it up to operating weight." },
-  { "notes": "During potentially hazardous test flights, crew wear parachutes and are prepared to bail out through an explosive hatch.", 
+	{ "notes": "Bare of seats and internal fittings, the first flight-test airplane carries dozens of Jacuzzi-size water jugs to bulk it up to operating weight." },
+  { "notes": "During potentially hazardous test flights, the crew wears parachutes and is prepared to bail out through an explosive hatch.", 
 	  "img": "test-crew.jpg" },
-	{ "notes": "During the VMU (for velocity minimum unstick) test, the pilot raises the nose so sharply during the takeoff roll that the tail hits the ground.",
+	{ "notes": "During the VMU (velocity minimum unstick) test, the pilot raises the nose so sharply during the takeoff roll that the tail hits the ground.",
 	  "src": "http://www.youtube.com/watch?v=_qKo7Pa8wgI" },
-	{ "notes": "To earn certification from the FAA and its European counterpart, a test plane must fly into stormy weather until substantial ice accumulates on its surface.",
+	{ "notes": "To earn certification from the Federal Aviation Administration and its European counterpart, a test plane must fly into stormy weather until substantial ice accumulates on its surface.",
 	  "src": "http://videos.airbus.com/video/iLyROoafIlQ2.html" },
 	{ "notes": "The A350 is designed to fly safely for up to seven hours on one engine." },
 	{ "notes": "During ground tests, planes taxi at high speed through giant puddles to see if the spray causes the engines to fail. (A380 shown here.)", 
@@ -61,7 +61,7 @@ var overlays = [
 		"src": "http://videos.airbus.com/video/iLyROoafIlby.html" },
 	{ "notes": "An A350 front fuselage in final assembly at Airbus’s huge facility in Toulouse, France.", 
 	  "img": "fuselage.jpg" },
-	{ "notes": "Curved winglets reduce the drag caused by vortices slipping off the end of the wing and increase fuel efficiency." },
+	{ "notes": "Curved winglets reduce the drag caused by vortexes slipping off the end of the wing and increase fuel efficiency." },
 	{ "notes": "All but the first five A350 test aircraft will eventually be refitted and sold to airlines." }
 	];
 // bloomberg news video! http://www.youtube.com/watch?v=bEOJajCuwKE
