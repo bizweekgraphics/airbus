@@ -1,0 +1,289 @@
+body {
+	overflow	: hidden;
+	padding		: 0;
+	margin		: 0;
+	background-color: #000;
+	color		: #222;
+  font-family:'BWHaasRegular', Helvetica, sans-serif;
+	font-size	: 100%;
+	line-height: 1.231;
+}
+
+.iframed .hide-in-iframe {
+  display: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+/* HEADER LOGO */
+/* this is largely ported from the main businessweek.com css */
+
+#logo {
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	display: block;
+	position: absolute;
+	float: left;
+	width: 477px;
+	height: 60px;
+	margin: 15px;
+}
+
+#logo a {
+	width: 100%;
+	height: inherit;
+	display: block;
+}
+
+#logo a#home_link {
+	width: 427px;
+	height: 33px;
+	background: url(../img/site-s5d303eb3f3-448dcf1d9671789f047efdb043527a71.png) no-repeat;
+	background-position: 0 -145px;
+}
+
+.dark_layout #logo a#home_link {
+	background-position: 0 -184px;
+}
+
+/* SUBHEAD */
+
+h2 {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+}
+
+h2 a {
+	color: #f0f;
+}
+
+h2 a:hover {
+	color: #f0f;
+}
+
+#channel_name {
+	position: absolute;
+	bottom: 0;
+	font-size: 27px;
+	display: block;
+	text-indent: 0;
+	font-weight: bold;
+	text-transform: capitalize;
+	font-family: "BWHaasHead",Arial,sans-serif;
+}
+
+#channel_name a, .channel #department_name a {
+	text-indent: 0;
+	width: auto;
+	height: auto;
+}
+
+#logo a {
+	display: block;
+}
+
+/* FONT DEFINITIONS */
+
+@font-face {
+  font-family: 'BloombergLBold';
+  src: url("http://www.businessweek.com/assets/type/bloombergl_heavy.eot?#iefix") format('embedded-opentype'),
+     url('http://www.businessweek.com/assets/type/bloombergl_heavy.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family:'BWHaasHead';
+  src: url('http://www.businessweek.com/assets/type/hinted/haas/bwhaasgroteskhead-95black.eot?#iefix') format('eot'),
+     url('http://www.businessweek.com/assets/type/hinted/haas/bwhaasgroteskhead-95black.woff') format('woff'),
+     url('http://www.businessweek.com/assets/type/haas/bwhaasgroteskhead-95black.ttf') format('truetype');
+
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: normal;
+}
+@font-face {
+  font-family:'BWHaasHead75Bold';
+  src: url('http://www.businessweek.com/assets/type/hinted/haas75/bwhaasgroteskhead-75bold.eot?#iefix') format('eot'),
+     url('http://www.businessweek.com/assets/type/hinted/haas75/bwhaasgroteskhead-75bold.woff') format('woff'),
+     url('http://www.businessweek.com/assets/type/haas75/bwhaasgrotesktext-75bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: normal;
+}
+@font-face {
+  font-family:'BWHaasRegular';
+  src: url('http://www.businessweek.com/assets/web_fonts/bwhaasgroteskhead-65medium.eot?#iefix') format('eot'),
+     url('http://www.businessweek.com/assets/web_fonts/bwhaasgroteskhead-65medium.woff') format('woff'),
+     url('http://www.businessweek.com/assets/web_fonts/bwhaasgrotesktext-65medium.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: normal;
+}
+
+
+/* HELPER STUFF */
+
+.ir {
+	text-indent: -119988px;
+	overflow: hidden;
+	text-align: left;
+	direction: ltr;
+	background-repeat: no-repeat;
+}
+
+/* PAGE STUFF */
+
+h3 { 
+  font-family:BWHaasHead, Helvetica, sans-serif; 
+  margin: 5px 0;
+}
+
+#hed, #popout {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 270px;
+  text-align: right;
+  cursor:pointer;
+}
+
+#hed:hover h3, #popout:hover h3 {
+  color: magenta;
+}
+
+#hed .dek {
+  display: none;
+  margin-right: 20px;
+}
+
+#hed:hover .dek {
+  display: inherit;
+}
+
+.dark_layout #hed {
+  color: white;
+}
+
+#popout {
+  display: none;
+}
+
+#load-progress {
+  position:absolute;
+  display:block;
+  left:40%;
+  top:50%;
+  width:20%;
+}
+
+#enable {
+  display: none;
+  position:absolute;
+  width: 220px;
+  left:50%;
+  top:50%;
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
+}
+
+#overlay {
+  background-color: rgba(255,255,255,0.5);
+	margin: 0 0 20px 0;
+	padding: 10px;
+  position: absolute;
+  left: 200px;
+  top: 150px;
+  width: 300px;
+  display: none;
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
+  border-radius: 4px;
+}
+
+#overlay img {
+  margin-top: 8px;
+}
+
+#colophon {
+  position: absolute;
+  right:15px;
+  bottom:15px;
+  text-align:right;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-family: Helvetica;
+  color:white;
+}
+
+#colophon a {
+  color: #ccc;
+}
+
+#overlay a {
+  color: #333;
+}
+
+#controls {
+  position: absolute;
+  left: 15px;
+  bottom: 15px;
+}
+
+#controls .glyphicon {
+  padding: 2px; /*shuffle icon was getting cut off*/
+}
+
+#controls button .label {
+  display: none;
+}
+
+#controls button:hover .label {
+  display: inherit;
+}
+
+/* SAFARIIIII */
+#no-webgl {
+  display:none;
+  width: 100%;
+  height: 100%;
+  padding: 100px 50px;
+  text-align: center;
+  background: white;
+  box-sizing: border-box;
+}
+#no-webgl table {
+  margin: 0 auto;
+}
+#no-webgl table td {
+  vertical-align: top;
+  padding: 10px;
+  font-size: 20pt;
+}
+
+@media (max-width: 630px) {
+  #no-webgl {
+    padding: 60px;
+    text-align: left;
+    font-family: Helvetica;
+  }
+  #no-webgl table {
+    display: none;
+  }
+}
+
+@media (min-width: 631px) {
+  #no-webgl ol {
+    display: none;
+  }
+}
