@@ -36,9 +36,9 @@ var amp=0.1,
 
 var overlayIndex = 0,
     overlayInterval,
-    overlayIntervalLength = 1000*8,
+    overlayIntervalLength = 1000*9,
     overlayDelay,
-    overlayDelayLength = 1000*2,
+    overlayDelayLength = 1000*1,
     overlayFadeLength = 1000;
 var overlays = [
   { "notes": "Airbus created a digital mock-up of the A350 that every engineer working on the airplane can use at any time.", 
