@@ -171,6 +171,10 @@ h3 {
   display: inherit;
 }
 
+.dark_layout #hed {
+  color: white;
+}
+
 #popout {
   display: none;
 }

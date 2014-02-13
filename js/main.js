@@ -50,7 +50,7 @@ var overlays = [
 		"src": "http://www.youtube.com/watch?v=B74_w3Ar9nI" },
 	{ "notes": "Bare of seats and internal fittings, the first flight-test airplane carries dozens of Jacuzzi-sized water jugs to bulk it up to operating weight." },
   { "notes": "During potentially hazardous test flights, crew wear parachutes and are prepared to bail out through an explosive hatch.", 
-	  "img": "" },
+	  "img": "test-crew.jpg" },
 	{ "notes": "During the VMU (for velocity minimum unstick) test, the pilot raises the nose so sharply during the takeoff roll that the tail hits the ground.",
 	  "src": "http://www.youtube.com/watch?v=_qKo7Pa8wgI" },
 	{ "notes": "To earn certification from the FAA and its European counterpart, a test plane must fly into stormy weather until substantial ice accumulates on its surface.",
@@ -60,7 +60,7 @@ var overlays = [
 	  "img": "splashy.gif",
 		"src": "http://videos.airbus.com/video/iLyROoafIlby.html" },
 	{ "notes": "An A350 front fuselage in final assembly at Airbus’s huge facility in Toulouse, France.", 
-	  "img": "" },
+	  "img": "fuselage.jpg" },
 	{ "notes": "Curved winglets reduce the drag caused by vortices slipping off the end of the wing and increase fuel efficiency." },
 	{ "notes": "All but the first five A350 test aircraft will eventually be refitted and sold to airlines." }
 	];
@@ -147,7 +147,26 @@ function init(){
 	context.fillRect( 0, 0, texture_placeholder.width, texture_placeholder.height );
   
   var skyboxDir = "skybox-cloudy";
-  
+  var hour = new Date().getHours();
+  hour = 15;
+  if(hour<6) {
+    $("body").addClass("dark_layout");
+    skyboxDir = "skybox-night";
+  } else if(hour<8) {
+    $("body").addClass("dark_layout");
+    skyboxDir = "skybox-sunset";
+  } else if(hour<12) {
+    skyboxDir = "skybox-cloudy";
+  } else if(hour<18) {
+    skyboxDir = "skybox-sunny";
+  } else if(hour<20) {
+    $("body").addClass("dark_layout");
+    skyboxDir = "skybox-sunset";    
+  } else {
+    $("body").addClass("dark_layout");
+    skyboxDir = "skybox-night";
+  }
+    
 	var materials = [
 
 		loadTexture( 'img/'+skyboxDir+'/px.jpg' ), // right
